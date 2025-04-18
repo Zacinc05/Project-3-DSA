@@ -11,6 +11,7 @@ int main()
     string item, quantity;
     priority_queue<tuple<double, int, string>> item_addition_order;
     unordered_map<string, double> listings = standard_market_price();
+    vector<pair<string,int>> unavailable_items;
 
     while (true) {
         cout << "Enter your item choice:" << endl;
@@ -30,8 +31,19 @@ int main()
 
     // load copy of the vendor data, create empty list of vendors in my cart. value will be the lowest shipping cost from that vendor.
 
-    double best_fit_sum = best_fit_algorithm(getVendorData(), item_addition_order);
+    double best_fit_sum = best_fit_algorithm(get_vendor_data(), item_addition_order, unavailable_items);
 
+    if(!unavailable_items.empty()) {
+        cout << "There are " << unavailable_items.size() << " items that dont have enough in stock" << endl << endl;
+
+        for (auto item : unavailable_items) {
+            cout << item.first << ": " << item.second << " missing." << endl;
+        }
+        cout << endl;
+    } else {
+        cout << "All items were added to stock." << endl;
+    }
+    cout << "Your Total:" << endl << "$";
     cout << fixed << setprecision(2) << best_fit_sum << endl;
 
     return 0;

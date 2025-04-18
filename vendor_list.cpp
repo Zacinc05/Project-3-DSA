@@ -79,7 +79,7 @@ tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<
     return {cheapest, lowest, counter};
 }
 
-double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions) {
+double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable) {
     // get the info of the times person wants and how many
 
     int amount_of;
@@ -92,6 +92,8 @@ double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<
         amount_of = get<1>(additions.top());
         additions.pop();
 
+
+        cout << "Searching for: " << item_name << endl << endl;
 
         // search for current cheapest option of item
 
@@ -111,7 +113,7 @@ double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<
                 {
                     if (!remove_from_available(cheapest_info, item_name, vendor_price_shipping))
                     {
-                        cout << "out of this item" << endl << endl; break;
+                        break;
                     }
                     cout << get<0>(cheapest_info) << "  " << get<1>(cheapest_info) << endl;
 
@@ -120,7 +122,11 @@ double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<
                 }
                 cout << endl;
             }
-            else {cout << "out of this item" << endl << endl; break;}
+            else {
+                cout << "out of this item" << endl << endl;
+                unavailable.push_back({item_name, amount_of - i});
+                break;
+            }
         }
     }
 
@@ -150,14 +156,14 @@ unordered_map<string, double> standard_market_price() {
     return smp;
 }
 
-
-// Ratings of each vendor
-
+// Ratings and # of sales of each vendor
+/*unordered_map<string, double, int> vendor_trust() {
+}*/
 
 // Each card has a list of available vendors. Each vendor has information of the price + shipping in a pair, along with quantity of the items available.
 // When calling for a certain card, it will sort through the map of that item.
 
-unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> getVendorData() {
+unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> get_vendor_data() {
     unordered_map<std::string, std::unordered_map<std::string, std::pair<std::pair<double, double>, int>>> vendor_data;
 
     vendor_data["Charizard"] = {
