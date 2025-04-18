@@ -8,4 +8,5 @@ include_directories(.)
 add_executable(Project_3_DSA
     main.cpp
     vendor_list.cpp
-    vendor_list.h)
+    vendor_list.h
+        use_algorithms.cpp)
