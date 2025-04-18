@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Project_3_DSA.dir/main.cpp.obj"
   "CMakeFiles/Project_3_DSA.dir/main.cpp.obj.d"
+  "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj"
+  "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj.d"
   "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj"
   "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj.d"
   "Project_3_DSA.exe"
