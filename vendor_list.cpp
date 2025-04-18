@@ -79,33 +79,29 @@ tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<
     return {cheapest, lowest, counter};
 }
 
-double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping) {
+double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions) {
     // get the info of the times person wants and how many
 
-    string amount_of;
+    int amount_of;
     string item_name;
     double total;
     unordered_map<string, double> in_cart;
 
-    while (true) {
-        cout << "Enter item name:" << endl;
-        cin >> item_name;
-        if (item_name == "-1") {break;}
-        cout << "How many do you want to add:" << endl;
-        cin >> amount_of;
-        if (amount_of == "-1") {break;}
+    while (!additions.empty()) {
+        item_name = get<2>(additions.top());
+        amount_of = get<1>(additions.top());
+        additions.pop();
 
-        cout << endl;
 
         // search for current cheapest option of item
 
         int i = 0;
-        while (i < stoi(amount_of)) {
+        while (i < amount_of) {
             unordered_map<string, pair<pair<double, double>, int>> available_locations = vendor_price_shipping[item_name];
 
             tuple<string, double, int> cheapest_info = best_fit_cheapest_of_item(available_locations, in_cart);
 
-            int max_iterations = min(get<2>(cheapest_info), stoi(amount_of)-i);
+            int max_iterations = min(get<2>(cheapest_info), amount_of-i);
 
             if (get<2>(cheapest_info) != -1)
             {
@@ -136,7 +132,32 @@ double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<
     return total;
 }
 
-unordered_map<std::string, std::unordered_map<std::string, std::pair<std::pair<double, double>, int>>> getVendorData() {
+// Market price of each item.
+
+unordered_map<string, double> standard_market_price() {
+
+    unordered_map<string, double> smp;
+
+    smp["Charizard"] = 120;
+    smp["Pikachu"] = 18;
+    smp["Bulbasaur"] = 8;
+    smp["Squirtle"] = 11;
+    smp["Jigglypuff"] = 8;
+    smp["Eevee"] = 12;
+    smp["Meowth"] = 8;
+    smp["Rizz"] = 8;
+
+    return smp;
+}
+
+
+// Ratings of each vendor
+
+
+// Each card has a list of available vendors. Each vendor has information of the price + shipping in a pair, along with quantity of the items available.
+// When calling for a certain card, it will sort through the map of that item.
+
+unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> getVendorData() {
     unordered_map<std::string, std::unordered_map<std::string, std::pair<std::pair<double, double>, int>>> vendor_data;
 
     vendor_data["Charizard"] = {
