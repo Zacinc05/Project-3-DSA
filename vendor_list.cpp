@@ -86,8 +86,8 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
     // initializing randomization factors
     random_device true_random;
     mt19937 generator(true_random());
-    uniform_int_distribution<> quantity_dist(1, 15);
-    uniform_real_distribution<> shipping_dist(0.0, 35.0);
+    uniform_int_distribution<> quantity_dist(1, 20);
+    uniform_real_distribution<> shipping_dist(0.0, 20.0);
     uniform_real_distribution<> card_available_probability(0.0, 1.0);
 
     // Actual list of vendor data to be returned after function execution
