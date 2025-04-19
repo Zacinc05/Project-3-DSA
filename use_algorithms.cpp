@@ -79,7 +79,7 @@ tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<
     return {cheapest, lowest, counter};
 }
 
-double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable) {
+pair<double,int> best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable) {
     // get the info of the times person wants and how many
 
     int amount_of;
@@ -135,7 +135,7 @@ double best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<
         total += itr->second;
     }
 
-    return total;
+    return {total, in_cart.size()};
 }
 
 
@@ -243,7 +243,7 @@ tuple<string, double, int> first_fit_cheapest_of_item(unordered_map<string, pair
 
 }
 
-double first_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable, unordered_map<string, double> market_price) {
+pair<double,int> first_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable, unordered_map<string, double> market_price) {
     // get the info of the times person wants and how many
 
     int amount_of;
@@ -303,5 +303,5 @@ double first_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair
         total += itr->second;
     }
 
-    return total;
+    return {total, in_cart.size()};
 }

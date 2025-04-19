@@ -34,14 +34,14 @@ int main()
 
     // load copy of the vendor data, create empty list of vendors in my cart. value will be the lowest shipping cost from that vendor.
     clock_t b_start = clock();
-    double best_fit_sum = best_fit_algorithm(get_vendor_data(), item_addition_order, best_fit_unavailable_items);
+    pair<double,int> best_fit_sum = best_fit_algorithm(get_vendor_data(), item_addition_order, best_fit_unavailable_items);
     clock_t b_end = clock();
     double b_time = static_cast<double>(b_end - b_start) / CLOCKS_PER_SEC;
 
     cout << endl << endl << "--------------------------------------------------------------------------------------" << endl << endl << endl;
 
     clock_t f_start = clock();
-    double first_fit_sum = first_fit_algorithm(get_vendor_data(), item_addition_order, first_fit_unavailable_items, listings);
+    pair<double,int> first_fit_sum = first_fit_algorithm(get_vendor_data(), item_addition_order, first_fit_unavailable_items, listings);
     clock_t f_end = clock();
     double f_time = static_cast<double>(f_end - f_start) / CLOCKS_PER_SEC;
 
@@ -56,7 +56,8 @@ int main()
         cout << "All items were added to stock." << endl;
     }
     cout << "Your Total:" << endl << "$";
-    cout << fixed << setprecision(2) << best_fit_sum << endl;
+    cout << fixed << setprecision(2) << best_fit_sum.first << endl;
+    cout << "Number of vendors to ship items: " << best_fit_sum.second << endl;
     cout << setprecision(5) << "Time to calculate: " << b_time << " seconds." << endl;
 
     if(!first_fit_unavailable_items.empty()) {
@@ -71,7 +72,8 @@ int main()
     }
 
     cout << "Your Total:" << endl << "$";
-    cout << fixed << setprecision(2) << first_fit_sum << endl;
+    cout << fixed << setprecision(2) << first_fit_sum.first << endl;
+    cout << "Number of vendors to ship items: " << first_fit_sum.second << endl;
     cout << setprecision(5) << "Time to calculate: " << f_time << " seconds." << endl;
 
     return 0;
