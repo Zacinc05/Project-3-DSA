@@ -1,0 +1,10 @@
+//
+// Created by Marvens on 4/19/2025.
+//
+
+#ifndef PROJECT_3_DSA_APPLICATIONWINDOW_H
+#define PROJECT_3_DSA_APPLICATIONWINDOW_H
+
+#endif //PROJECT_3_DSA_APPLICATIONWINDOW_H
+
+#include <SFML/Graphics.hpp>
