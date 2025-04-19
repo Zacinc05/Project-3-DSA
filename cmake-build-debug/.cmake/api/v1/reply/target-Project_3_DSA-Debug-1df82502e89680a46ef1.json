@@ -45,14 +45,14 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -fdiagnostics-color=always"
+					"fragment" : "-g -std=gnu++14 -fdiagnostics-color=always"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 2,
-					"path" : "C:/Users/helix/OneDrive/Documents/GitHub/Project-3-DSA/."
+					"path" : "C:/Users/Marvens/CLionProjects/Project-3-DSA/."
 				}
 			],
 			"language" : "CXX",
