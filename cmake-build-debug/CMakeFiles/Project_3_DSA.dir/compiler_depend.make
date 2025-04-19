@@ -343,8 +343,10 @@ CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj: C:/Users/helix/OneDrive/Doc
 CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Documents/GitHub/Project-3-DSA/vendor_list.cpp \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed/limits.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed/syslimits.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/algorithm \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/array \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward/binders.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/algorithmfwd.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/alloc_traits.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/allocator.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_ios.h \
@@ -386,9 +388,12 @@ CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Docume
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/predefined_ops.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/ptr_traits.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/quoted_string.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/random.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/random.tcc \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/range_access.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/sstream.tcc \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/std_abs.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_algo.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_algobase.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_bvector.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_construct.h \
@@ -398,14 +403,17 @@ CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Docume
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator_base_funcs.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator_base_types.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_numeric.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_pair.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_queue.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_relops.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_tempbuf.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_uninitialized.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_vector.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/streambuf.tcc \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/streambuf_iterator.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stringfwd.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/uniform_int_dist.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/unique_ptr.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/unordered_map.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/unordered_set.h \
@@ -414,6 +422,7 @@ CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Docume
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cctype \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cerrno \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/clocale \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cmath \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdint \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdio \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdlib \
@@ -437,10 +446,13 @@ CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Docume
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/iosfwd \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/iostream \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/istream \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/limits \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/locale \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/new \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/numeric \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ostream \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/queue \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/random \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/sstream \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/stdexcept \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/stdlib.h \
@@ -465,10 +477,16 @@ CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Docume
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/gthr-default.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/gthr.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/messages_members.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/opt_random.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/time_members.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/emmintrin.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/mm_malloc.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/mmintrin.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/pmmintrin.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/stddef.h \
   C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/stdint.h \
+  C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/xmmintrin.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/_mingw.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h \
@@ -484,6 +502,7 @@ CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj: C:/Users/helix/OneDrive/Docume
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/limits.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/locale.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/malloc.h \
+  C:/Users/helix/mingw64/x86_64-w64-mingw32/include/math.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/process.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/pthread.h \
   C:/Users/helix/mingw64/x86_64-w64-mingw32/include/pthread_compat.h \
@@ -537,7 +556,11 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward/bin
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/locale_classes.tcc:
 
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/uniform_int_dist.h:
+
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/alloc_traits.h:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/xmmintrin.h:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/allocator.h:
 
@@ -581,6 +604,8 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/hashtab
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/exception_ptr.h:
 
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/algorithmfwd.h:
+
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator_base_types.h:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/functional_hash.h:
@@ -601,6 +626,8 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/invoke.
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/istream.tcc:
 
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_tempbuf.h:
+
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/predefined_ops.h:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/vector.tcc:
@@ -618,6 +645,8 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/nested_
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/move.h:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/locale_facets.tcc:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/mmintrin.h:
 
 C:/Users/helix/mingw64/x86_64-w64-mingw32/include/sec_api/wchar_s.h:
 
@@ -684,6 +713,8 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/clocale:
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdint:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdio:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/algorithm:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdlib:
 
@@ -752,6 +783,8 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/streambuf:
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/string:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/system_error:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/opt_random.h:
 
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/tuple:
 
@@ -833,6 +866,8 @@ C:/Users/helix/mingw64/x86_64-w64-mingw32/include/stdint.h:
 
 C:/Users/helix/mingw64/x86_64-w64-mingw32/include/stdio.h:
 
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/random.h:
+
 C:/Users/helix/mingw64/x86_64-w64-mingw32/include/stdlib.h:
 
 C:/Users/helix/mingw64/x86_64-w64-mingw32/include/swprintf.inl:
@@ -854,3 +889,25 @@ C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/unorder
 C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/unordered_set:
 
 C:/Users/helix/OneDrive/Documents/GitHub/Project-3-DSA/vendor_list.cpp:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/random.tcc:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_algo.h:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_numeric.h:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cmath:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/limits:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/numeric:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/random:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/emmintrin.h:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/mm_malloc.h:
+
+C:/Users/helix/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/pmmintrin.h:
+
+C:/Users/helix/mingw64/x86_64-w64-mingw32/include/math.h:

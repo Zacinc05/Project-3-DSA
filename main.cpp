@@ -57,7 +57,7 @@ int main()
     }
     cout << "Your Total:" << endl << "$";
     cout << fixed << setprecision(2) << best_fit_sum << endl;
-    cout << setprecision(2) << "Time to calculate: " << b_time << " seconds." << endl;
+    cout << setprecision(5) << "Time to calculate: " << b_time << " seconds." << endl;
 
     if(!first_fit_unavailable_items.empty()) {
         cout << "There are " << first_fit_unavailable_items.size() << " items that dont have enough in stock" << endl << endl;
@@ -72,7 +72,7 @@ int main()
 
     cout << "Your Total:" << endl << "$";
     cout << fixed << setprecision(2) << first_fit_sum << endl;
-    cout << setprecision(2) << "Time to calculate: " << f_time << " seconds." << endl;
+    cout << setprecision(5) << "Time to calculate: " << f_time << " seconds." << endl;
 
     return 0;
 }
