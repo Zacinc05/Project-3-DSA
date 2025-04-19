@@ -88,7 +88,6 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
     mt19937 generator(true_random());
     uniform_int_distribution<> quantity_dist(1, 20);
     uniform_real_distribution<> shipping_dist(0.0, 20.0);
-    uniform_real_distribution<> card_available_probability(0.0, 1.0);
 
     // Actual list of vendor data to be returned after function execution
     unordered_map<std::string, std::unordered_map<std::string, std::pair<std::pair<double, double>, int>>> vendor_data;
@@ -197,15 +196,13 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
             const string& vendor = vendor_names[i];
 
             // 70% chance for a vendor having a card available
-            if (card_available_probability(generator) < 0.7){
-                double msrp_mult = msrp_multipliers[msrp_multiplier_dist(generator)];
-                double price = round(msrp * msrp_mult * 100) / 100;
-                double shipping = vendor_shipping_costs[vendor];
-                int quantity = quantity_dist(generator);
+            double msrp_mult = msrp_multipliers[msrp_multiplier_dist(generator)];
+            double price = round(msrp * msrp_mult * 100) / 100;
+            double shipping = vendor_shipping_costs[vendor];
+            int quantity = quantity_dist(generator);
 
-                vendor_data[card_name][vendor] = {{price, shipping}, quantity};
+            vendor_data[card_name][vendor] = {{price, shipping}, quantity};
 
-            }
         }
     }
 
