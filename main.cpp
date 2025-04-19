@@ -38,6 +38,8 @@ int main()
     clock_t b_end = clock();
     double b_time = static_cast<double>(b_end - b_start) / CLOCKS_PER_SEC;
 
+    cout << endl << endl << "--------------------------------------------------------------------------------------" << endl << endl << endl;
+
     clock_t f_start = clock();
     double first_fit_sum = first_fit_algorithm(get_vendor_data(), item_addition_order, first_fit_unavailable_items, listings);
     clock_t f_end = clock();
