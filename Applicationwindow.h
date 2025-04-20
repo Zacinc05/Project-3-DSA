@@ -120,53 +120,6 @@ public:
         // Variables for search functionality
         string newCardName = "";
         float scrollOffset = 0.0f;
-
-        // Main loop
-        while (window.isOpen()){
-            Event event;
-
-            // Process all events before updating the frame
-            while (window.pollEvent(event)){
-                if (event.type == Event::Closed){
-                    window.close();
-                }
-
-                // Process search box events and get any new card names
-                string searchResult = searchBoxInput(event, searchBox, font);
-                if (!searchResult.empty()){
-                    newCardName = searchResult;
-                }
-            }
-
-            // Clear the window
-            window.clear(Color::White);
-
-            // Draw UI elements
-            window.draw(cardDisplay);
-            window.draw(cardResults);
-            window.draw(searchBox);
-            window.draw(search_button);
-            window.draw(searchResults);
-            window.draw(vendorBox);
-            window.draw(vendorResults);
-            window.draw(cardPlaceholder);
-            window.draw(vendorsText);
-
-            // Draw search button text
-            Text searchButtonText("S", font, 16);
-            searchButtonText.setFillColor(Color::Black);
-            searchButtonText.setPosition(257, 55);
-            window.draw(searchButtonText);
-
-            // Update search box input display
-            searchBoxInput(event, searchBox, font);
-
-            // Update and draw search results
-            updateSearchResults(window, searchResults, font, newCardName, event, scrollOffset);
-
-            // Update the display
-            window.display();
-        }
     }
 
     void updateSearchResults(RenderWindow& window, RectangleShape &searchResults, Font &font, string &newCardName, Event &currentEvent, float& scrollOffset){
