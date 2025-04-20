@@ -248,6 +248,9 @@ Project_3_DSA_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Project_3_DSA_SOURCE_DIR:STATIC=C:/Users/Marvens/Documents/GitHub/Project-3-DSA
 
+//The directory containing a CMake configuration file for SFML.
+SFML_DIR:PATH=SFML_DIR-NOTFOUND
+
 //Path to a file.
 SFML_DOC_DIR:PATH=SFML_DOC_DIR-NOTFOUND
 

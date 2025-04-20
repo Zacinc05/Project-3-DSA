@@ -1294,6 +1294,18 @@
 			"value" : "C:/Users/Marvens/Documents/GitHub/Project-3-DSA"
 		},
 		{
+			"name" : "SFML_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for SFML."
+				}
+			],
+			"type" : "PATH",
+			"value" : "SFML_DIR-NOTFOUND"
+		},
+		{
 			"name" : "SFML_DOC_DIR",
 			"properties" : 
 			[

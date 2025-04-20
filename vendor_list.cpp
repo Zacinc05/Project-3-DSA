@@ -195,7 +195,6 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
         for (int i = 0; i < potential_vendors; i++){
             const string& vendor = vendor_names[i];
 
-            // 70% chance for a vendor having a card available
             double msrp_mult = msrp_multipliers[msrp_multiplier_dist(generator)];
             double price = round(msrp * msrp_mult * 100) / 100;
             double shipping = vendor_shipping_costs[vendor];
