@@ -76,8 +76,40 @@ unordered_map<string, double> standard_market_price() {
 }
 
 // Ratings and # of sales of each vendor
-/*unordered_map<string, double, int> vendor_trust() {
-}*/
+unordered_map<string, pair<double, int>> vendor_trust() {
+
+    unordered_map<string, pair<double, int>> vendor_data;
+
+    vector<string> vendor_names = {
+        "Card Haven", "The Pokémon Emporium", "Elite Card Traders", "Poké Treasures", "Gotta Catch 'Em All Cards",
+        "Trainer's Trove", "Rare Finds Collectibles", "Card Masters", "The Trading Post", "Pokémon Card Paradise",
+        "Victory Vault", "Battle Ready Cards", "Card Kingdom", "The Collector's Den", "Poké Mart Plus",
+        "Legendary Loot", "Card Quest", "The Card Corner", "Pokémon Card Central", "Trainer's Choice",
+        "Ultra Rare Cards", "Card Sharks", "The Card Cave", "Pokémon Card Galaxy", "Champion Cards",
+        "Card Craze", "The Card Shop", "Pokémon Card World", "Trainer's Deck", "Epic Card Pulls",
+        "Card Mania", "The Card Hub", "Pokémon Card Universe", "Ace Card Traders", "Card Collect",
+        "The Card Spot", "Pokémon Card Store", "Trainer's Vault", "Amazing Card Finds", "Card Zone",
+        "The Card Place", "Pokémon Card Depot", "Best Card Deals", "Card Source", "The Card Stop",
+        "Pokémon Card Center", "Trainer's Market", "Awesome Card Buys", "Card Gallery"};
+
+    double rating;
+    int sales;
+
+    // Generating values for rating and number of sales
+    random_device true_random;
+    mt19937 generator(true_random());
+    uniform_int_distribution<> rating_dist(0, 500);
+    uniform_int_distribution<> sales_dist(10000, 999999);
+
+    for (string name : vendor_names) {
+        int temp = rating_dist(generator);
+        rating = temp / 100.0;
+        sales = sales_dist(generator);
+        vendor_data[name] = make_pair(rating, sales);
+    }
+
+    return vendor_data;
+}
 
 // Each card has a list of available vendors. Each vendor has information of the price + shipping in a pair, along with quantity of the items available.
 // When calling for a certain card, it will sort through the map of that item.
@@ -206,4 +238,19 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
     }
 
     return vendor_data;
+}
+
+unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> filtered_vendors(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendors, unordered_map<string, pair<double, int>>& data, int star_rating, int sales) {
+
+    unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> new_list;
+
+    for (auto& card : vendors) {
+        for (auto& vendor : card.second) {
+            if (data[vendor.first].first >= star_rating && data[vendor.first].second >= sales * 10000) {
+                new_list[card.first][vendor.first] = {{vendor.second.first.first, vendor.second.first.second}, vendor.second.second};
+            }
+        }
+    }
+
+    return new_list;
 }

@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/Marvens/Documents/GitHub/Project-3-DSA/main.cpp" "CMakeFiles/Project_3_DSA.dir/main.cpp.obj" "gcc" "CMakeFiles/Project_3_DSA.dir/main.cpp.obj.d"
-  "C:/Users/Marvens/Documents/GitHub/Project-3-DSA/use_algorithms.cpp" "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj" "gcc" "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj.d"
-  "C:/Users/Marvens/Documents/GitHub/Project-3-DSA/vendor_list.cpp" "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj" "gcc" "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj.d"
+  "/Users/dhcarrot/CLionProjects/Project-3-DSA/main.cpp" "CMakeFiles/Project_3_DSA.dir/main.cpp.o" "gcc" "CMakeFiles/Project_3_DSA.dir/main.cpp.o.d"
+  "/Users/dhcarrot/CLionProjects/Project-3-DSA/use_algorithms.cpp" "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.o" "gcc" "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.o.d"
+  "/Users/dhcarrot/CLionProjects/Project-3-DSA/vendor_list.cpp" "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.o" "gcc" "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

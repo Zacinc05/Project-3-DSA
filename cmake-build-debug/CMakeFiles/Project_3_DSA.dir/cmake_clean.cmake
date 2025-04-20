@@ -1,14 +1,12 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Project_3_DSA.dir/main.cpp.obj"
-  "CMakeFiles/Project_3_DSA.dir/main.cpp.obj.d"
-  "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj"
-  "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.obj.d"
-  "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj"
-  "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.obj.d"
-  "Project_3_DSA.exe"
-  "Project_3_DSA.exe.manifest"
+  "CMakeFiles/Project_3_DSA.dir/main.cpp.o"
+  "CMakeFiles/Project_3_DSA.dir/main.cpp.o.d"
+  "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.o"
+  "CMakeFiles/Project_3_DSA.dir/use_algorithms.cpp.o.d"
+  "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.o"
+  "CMakeFiles/Project_3_DSA.dir/vendor_list.cpp.o.d"
+  "Project_3_DSA"
   "Project_3_DSA.pdb"
-  "libProject_3_DSA.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
