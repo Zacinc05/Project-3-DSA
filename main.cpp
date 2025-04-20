@@ -61,18 +61,19 @@ int main()
         }
     }
 
-
+    unordered_map<string, pair<double, int>> reviews = vendor_trust();
+    unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_data = filtered_vendors(get_vendor_data(), reviews, star_rating, number_of_sales);
 
     // load copy of the vendor data, create empty list of vendors in my cart. value will be the lowest shipping cost from that vendor.
     clock_t b_start = clock();
-    pair<double,int> best_fit_sum = best_fit_algorithm(get_vendor_data(), item_addition_order, best_fit_unavailable_items, vendor_trust());
+    pair<double,int> best_fit_sum = best_fit_algorithm(vendor_data, item_addition_order, best_fit_unavailable_items, reviews);
     clock_t b_end = clock();
     double b_time = static_cast<double>(b_end - b_start) / CLOCKS_PER_SEC;
 
     cout << endl << endl << "--------------------------------------------------------------------------------------" << endl << endl << endl;
 
     clock_t f_start = clock();
-    pair<double,int> first_fit_sum = first_fit_algorithm(get_vendor_data(), item_addition_order, first_fit_unavailable_items, listings);
+    pair<double,int> first_fit_sum = first_fit_algorithm(vendor_data, item_addition_order, first_fit_unavailable_items, listings, reviews);
     clock_t f_end = clock();
     double f_time = static_cast<double>(f_end - f_start) / CLOCKS_PER_SEC;
 
