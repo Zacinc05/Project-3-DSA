@@ -185,16 +185,16 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
             };
 
     vector<string> vendor_names = {
-            "Card Haven", "The Pokémon Emporium", "Elite Card Traders", "Poké Treasures", "Gotta Catch 'Em All Cards",
-            "Trainer's Trove", "Rare Finds Collectibles", "Card Masters", "The Trading Post", "Pokémon Card Paradise",
-            "Victory Vault", "Battle Ready Cards", "Card Kingdom", "The Collector's Den", "Poké Mart Plus",
-            "Legendary Loot", "Card Quest", "The Card Corner", "Pokémon Card Central", "Trainer's Choice",
-            "Ultra Rare Cards", "Card Sharks", "The Card Cave", "Pokémon Card Galaxy", "Champion Cards",
-            "Card Craze", "The Card Shop", "Pokémon Card World", "Trainer's Deck", "Epic Card Pulls",
-            "Card Mania", "The Card Hub", "Pokémon Card Universe", "Ace Card Traders", "Card Collect",
-            "The Card Spot", "Pokémon Card Store", "Trainer's Vault", "Amazing Card Finds", "Card Zone",
-            "The Card Place", "Pokémon Card Depot", "Best Card Deals", "Card Source", "The Card Stop",
-            "Pokémon Card Center", "Trainer's Market", "Awesome Card Buys", "Card Gallery"};
+            "Card Haven", "The Pokemon Emporium", "Elite Card Traders", "Poke Treasures", "Gotta Catch 'Em All Cards",
+            "Trainer's Trove", "Rare Finds Collectibles", "Card Masters", "The Trading Post", "Pokemon Card Paradise",
+            "Victory Vault", "Battle Ready Cards", "Card Kingdom", "The Collector's Den", "Poke Mart Plus",
+            "Legendary Loot", "Card Quest", "The Card Corner", "Pokemon Card Central", "Trainer's Choice",
+            "Ultra Rare Cards", "Card Sharks", "The Card Cave", "Pokemon Card Galaxy", "Champion Cards",
+            "Card Craze", "The Card Shop", "Pokemon Card World", "Trainer's Deck", "Epic Card Pulls",
+            "Card Mania", "The Card Hub", "Pokemon Card Universe", "Ace Card Traders", "Card Collect",
+            "The Card Spot", "Pokemon Card Store", "Trainer's Vault", "Amazing Card Finds", "Card Zone",
+            "The Card Place", "Pokemon Card Depot", "Best Card Deals", "Card Source", "The Card Stop",
+            "Pokemon Card Center", "Trainer's Market", "Awesome Card Buys", "Card Gallery"};
 
     // MSRP multipliers - These contain duplicates for the more common MSRP multipliers, and fewer of the less-common ones
     // Aka, more MSRP multiplies in the 0.8-0.9 range for realism
