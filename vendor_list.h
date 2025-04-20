@@ -8,10 +8,12 @@
 #include <utility>
 using namespace std;
 
-unordered_map<std::string, std::unordered_map<std::string, std::pair<std::pair<double, double>, int>>> get_vendor_data();
+unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> get_vendor_data();
 
 // Will make a way so only include from a vendor based on a certain rating.
-//unordered_map<string, double, int> vendor_trust();
+unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> filtered_vendors(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendors, double star_rating, int sales);
+
+unordered_map<string, pair<double, int>> vendor_trust();
 
 unordered_map<string, double> standard_market_price();
 

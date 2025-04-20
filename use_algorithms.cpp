@@ -24,7 +24,7 @@ bool remove_from_available(tuple<string, double, int> rem, string item, unordere
 
 // find the current cheapest item (+ shipping if not on list)
 // will also return the count of how man at same price exist, as it'll be the cheapest item next time as well
-tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<pair<double, double>, int>>& locations, unordered_map<string, double>& in_cart) {
+tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<pair<double, double>, int>>& locations, unordered_map<string, double>& in_cart, unordered_map<string, pair<double, int>> reviews) {
 
     // if none available, end. otherwise, search for best current option based on this item's current price (+shipping if necessary)
 
@@ -60,7 +60,7 @@ tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<
 
     // update the vendors, lowest shipping routes, and return vals of the best item
 
-    cout << "adding from store: " << cheapest << endl;
+    cout << "adding from store: " << cheapest << " - Ratings: " << reviews[cheapest].first << "; # of Sales: " << reviews[cheapest].second << endl;
 
     if (in_cart.find(cheapest) != in_cart.end())
     {
@@ -79,7 +79,7 @@ tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<
     return {cheapest, lowest, counter};
 }
 
-pair<double,int> best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable) {
+pair<double,int> best_fit_algorithm(unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_price_shipping, priority_queue<tuple<double, int, string>> additions, vector<pair<string,int>>& unavailable, unordered_map<string, pair<double, int>> reviews) {
     // get the info of the times person wants and how many
 
     int amount_of;
@@ -101,7 +101,7 @@ pair<double,int> best_fit_algorithm(unordered_map<string, unordered_map<string, 
         while (i < amount_of) {
             unordered_map<string, pair<pair<double, double>, int>> available_locations = vendor_price_shipping[item_name];
 
-            tuple<string, double, int> cheapest_info = best_fit_cheapest_of_item(available_locations, in_cart);
+            tuple<string, double, int> cheapest_info = best_fit_cheapest_of_item(available_locations, in_cart, reviews);
 
             int max_iterations = min(get<2>(cheapest_info), amount_of-i);
 
