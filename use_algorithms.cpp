@@ -22,6 +22,21 @@ bool remove_from_available(tuple<string, double, int> rem, string item, unordere
     return false;
 }
 
+string vendor_card_info(unordered_map<string, pair<pair<double, double>, int>> data, unordered_map<string, pair<double, int>> reviews) {
+    string output = "";
+    string additions;
+
+    for (auto it = data.begin(); it != data.end(); it++) {
+        additions = it->first; additions += ": ";
+        additions += to_string(reviews[it->first].first); additions += " rating, "; additions += to_string(reviews[it->first].second); additions += " sales.";
+
+        output += additions + "\n";
+    }
+    cout << output << endl;
+
+    return output;
+}
+
 // find the current cheapest item (+ shipping if not on list)
 // will also return the count of how man at same price exist, as it'll be the cheapest item next time as well
 tuple<string, double, int> best_fit_cheapest_of_item(unordered_map<string, pair<pair<double, double>, int>>& locations, unordered_map<string, double>& in_cart, unordered_map<string, pair<double, int>> reviews) {

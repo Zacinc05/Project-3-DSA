@@ -46,27 +46,35 @@ int main()
         cout << "Please enter a valid input." << endl;
     }
 
-    // Loops to get all user input on card choices and quantity specification
-    while (true) {
-        cout << "Enter your item choice (-1 if finished):" << endl;
-        cin >> add_item;
-        if (add_item == "-1") {break;}
-        cout << "Enter quantity (-1 if finished):" << endl;
-        cin >> quantity;
-        if (quantity == "-1") {break;}
-
-        if(listings.find(add_item) != listings.end()) {item_addition_order.push({stoi(quantity) * listings[add_item], stoi(quantity), add_item});}
-        else {
-            cout << endl << "Item not found. Please Reenter:" << endl << endl;
-        }
-    }
-
     // Creates info on star ratings and # of sales for each vendor
     unordered_map<string, pair<double, int>> reviews = vendor_trust();
 
     // Creates the vendor data and also creates a filtered list of vendors
     unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_data = get_vendor_data();
     unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> filtered_data = filtered_vendors(vendor_data, reviews, star_rating, number_of_sales);
+
+    // Loops to get all user input on card choices and quantity specification
+    while (true) {
+        cout << "Enter your item choice (-1 if finished):" << endl;
+        cin >> add_item;
+        if (add_item == "-1") {break;}
+        if(listings.find(add_item) == listings.end()) {
+            cout << endl << "Item not found. Please Reenter:" << endl << endl;
+            continue;
+        }
+
+        string vendor_listings = vendor_card_info(vendor_data[add_item], reviews);
+
+        cout << "Enter quantity (-1 if finished):" << endl;
+        cin >> quantity;
+        if (quantity == "-1") {break;}
+
+        if (!regex_match(quantity, regex("[1-99]"))) {
+            cout << "Please enter a valid input." << endl;
+            continue;
+        }
+        item_addition_order.push({stoi(quantity) * listings[add_item], stoi(quantity), add_item});
+    }
 
     // load copy of the vendor data, create empty list of vendors in my cart. value will be the lowest shipping cost from that vendor.
     clock_t b_start = clock();

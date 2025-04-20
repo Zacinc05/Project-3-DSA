@@ -19,4 +19,7 @@ pair<double,int> first_fit_algorithm(unordered_map<string, unordered_map<string,
 
 tuple<string, double, int> first_fit_add_from_cart_vendor(unordered_map<string, pair<pair<double, double>, int>>& locations, unordered_map<string, double>& in_cart, double ovr_market_price, unordered_map<string, pair<double, int>> reviews);
 
+string vendor_card_info(unordered_map<string, pair<pair<double, double>, int>> data, unordered_map<string, pair<double, int>> reviews);
+
+
 #endif //USE_ALGORITHMS_H
