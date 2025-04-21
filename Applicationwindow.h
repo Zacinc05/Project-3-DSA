@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Font.hpp>
 using namespace sf;
@@ -19,31 +20,35 @@ using namespace std;
 class ApplicationWindow{
     // Data structure
     map<string, Texture> cardTextures;
+    // SFML Objects
+    RenderWindow window;
+    Font font;
+
+    // UI components
+    RectangleShape cardDisplay;
+    RectangleShape cardResults;
+    RectangleShape searchBox;
+    RectangleShape search_button;
+    RectangleShape searchResults;
+    RectangleShape vendorBox;
+    RectangleShape vendorResults;
+
+    // Text elements
+    Text initialSearch;
+    Text vendorsText;
+    Text cardPlaceholder;
+
+    // State variables
+    string newCardName;
+    float scrollOffset;
 
 public:
-    /* Constructor
-    ApplicationWindow(Font font){
-        Texture buffer;
-        /* buffer.loadFromFile("./Files/logo.png")
-        cardTextures.emplace("logo", buffer);
-        logo.setTexture(gametextures["logo"]);
-        buffer.loadFromFile("./Files/search_button.png")
-        cardTextures.emplace("search_button", buffer);
-        search_button.setTexture(gametextures["search_button"]);
-    } */
-
-    void setText(Text &text, float x, float y){
-        FloatRect textRect = text.getLocalBounds();
-        text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-        text.setPosition(Vector2f(x, y));
-    }
-
     void createApplicationWindow(){
         const unsigned int window_width = 1000;
         const unsigned int window_height = 900;
 
         // Creating the main window
-        RenderWindow window(VideoMode(window_width, window_height), "Opti-Cart");
+        window.create(VideoMode(window_width, window_height), "Opti-Cart");
         window.setFramerateLimit(60);
 
         // Loading font
@@ -54,66 +59,72 @@ public:
         }
 
         // Card Display
-        RectangleShape cardDisplay(Vector2f(509, 700));
+        cardDisplay.setSize(Vector2f(509, 700));
         cardDisplay.setPosition((window_width - 509.0) / 2, 100);
         cardDisplay.setOutlineColor(Color::Black);
         cardDisplay.setOutlineThickness(3);
         cardDisplay.setFillColor(Color::White);
 
         // Card Results
-        RectangleShape cardResults(Vector2f(300, 50));
+        cardResults.setSize(Vector2f(300, 50));
         cardResults.setPosition((window_width - 300.0) / 2, 820);
         cardResults.setOutlineColor(Color::Black);
         cardResults.setOutlineThickness(2);
         cardResults.setFillColor(Color::White);
 
         // Search Box
-        RectangleShape searchBox(Vector2f(200, 40));
+        searchBox.setSize(Vector2f(200, 40));
         searchBox.setPosition(40, 50);
         searchBox.setOutlineColor(Color::Black);
         searchBox.setOutlineThickness(2);
         searchBox.setFillColor(Color::White);
 
         // Search Button
-        RectangleShape search_button(Vector2f(30, 30));
+        search_button.setSize(Vector2f(30, 30));
         search_button.setPosition(250, 55);
         search_button.setOutlineColor(Color::Black);
         search_button.setOutlineThickness(1);
         search_button.setFillColor(Color(230, 230, 230));
 
         // Search Results
-        RectangleShape searchResults(Vector2f(200, 300));
+        searchResults.setSize(Vector2f(200, 300));
         searchResults.setPosition(40, 100);
         searchResults.setOutlineColor(Color::Black);
         searchResults.setOutlineThickness(2);
         searchResults.setFillColor(Color::White);
 
         // Vendor Box
-        RectangleShape vendorBox(Vector2f(200, 40));
+        vendorBox.setSize(Vector2f(200, 40));
         vendorBox.setPosition(window_width - 240, 50);
         vendorBox.setOutlineColor(Color::Black);
         vendorBox.setOutlineThickness(2);
         vendorBox.setFillColor(Color::White);
 
         // Vendor Results
-        RectangleShape vendorResults(Vector2f(200, 300));
+        vendorResults.setSize(Vector2f(200, 300));
         vendorResults.setPosition(window_width - 240, 100);
         vendorResults.setOutlineColor(Color::Black);
         vendorResults.setOutlineThickness(2);
         vendorResults.setFillColor(Color::White);
 
         // Search text (reusing your variable)
-        Text initialSearch("Type in a card.", font, 16);
+        initialSearch.setFont(font);
+        initialSearch.setCharacterSize(16);
+        initialSearch.setString("Type in a card.");
         initialSearch.setFillColor(Color::Black);
         initialSearch.setPosition(50, 55);
 
         // Vendors text
-        Text vendorsText("Vendors", font, 18);
+        vendorsText.setFont(font);
+        vendorsText.setCharacterSize(16);
+        vendorsText.setString("Vendors");
         vendorsText.setFillColor(Color::Black);
         vendorsText.setPosition(window_width - 230, 55);
 
         // Card placeholder text
-        Text cardPlaceholder("Card Image", font, 30);
+        cardPlaceholder.setFont(font);
+        cardPlaceholder.setCharacterSize(16);
+        cardPlaceholder.setString("Card Image");
         cardPlaceholder.setFillColor(Color::Black);
         cardPlaceholder.setPosition((window_width - 509) / 2 + 175, 300);
 
@@ -371,8 +382,7 @@ public:
             placeholderText.setFont(font);
             placeholderText.setCharacterSize(16);
             placeholderText.setFillColor(Color(150, 150, 150));
-            placeholderText.setPosition(searchBox.getPosition().x + 10,
-                                        searchBox.getPosition().y + (searchBox.getSize().y - 24) / 2);
+            placeholderText.setPosition(searchBox.getPosition().x + 10,searchBox.getPosition().y + (searchBox.getSize().y - 24) / 2);
 
             if (currentState == entering_card_name){
                 placeholderText.setString("Type in a card.");
@@ -392,6 +402,71 @@ public:
         }
     }
 
+    void updateCardDisplay(RenderWindow &window, RectangleShape cardDisplay, const string &searchQuery){
+        // Static texture map used to cache any loaded textures
+        static map<string, Texture> cardTextures;
+        static map<string, int> pokemonNumbers = {
+                {"Bulbasaur", 1}, {"Ivysaur", 2}, {"Venusaur", 3}, {"Charmander", 4}, {"Charmeleon", 5}, {"Charizard", 6},
+                {"Squirtle", 7}, {"Wartortle", 8}, {"Blastoise", 9}, {"Caterpie", 10}, {"Metapod", 11}, {"Butterfree", 12},
+                {"Weedle", 13}, {"Kakuna", 14}, {"Beedrill", 15}, {"Pidgey", 16}, {"Pidgeotto", 17}, {"Pidgeot", 18},
+                {"Rattata", 19}, {"Raticate", 20}, {"Spearow", 21}, {"Fearow", 22}, {"Ekans", 23}, {"Arbok", 24},
+                {"Pikachu", 25}, {"Raichu", 26}, {"Sandshrew", 27}, {"Sandslash", 28}, {"Nidoran♀", 29}, {"Nidorina", 30},
+                {"Nidoqueen", 31}, {"Nidoran♂", 32}, {"Nidorino", 33}, {"Nidoking", 34}, {"Clefairy", 35}, {"Clefable", 36},
+                {"Vulpix", 37}, {"Ninetales", 38}, {"Jigglypuff", 39}, {"Wigglytuff", 40}, {"Zubat", 41}, {"Golbat", 42},
+                {"Oddish", 43}, {"Gloom", 44}, {"Vileplume", 45}, {"Paras", 46}, {"Parasect", 47}, {"Venonat", 48},
+                {"Venomoth", 49}, {"Diglett", 50}, {"Dugtrio", 51}, {"Meowth", 52}, {"Persian", 53}, {"Psyduck", 54},
+                {"Golduck", 55}, {"Mankey", 56}, {"Primeape", 57}, {"Growlithe", 58}, {"Arcanine", 59}, {"Poliwag", 60},
+                {"Poliwhirl", 61}, {"Poliwrath", 62}, {"Abra", 63}, {"Kadabra", 64}, {"Alakazam", 65}, {"Machop", 66},
+                {"Machoke", 67}, {"Machamp", 68}, {"Bellsprout", 69}, {"Weepinbell", 70}, {"Victreebel", 71}, {"Tentacool", 72},
+                {"Tentacruel", 73}, {"Geodude", 74}, {"Graveler", 75}, {"Golem", 76}, {"Ponyta", 77}, {"Rapidash", 78},
+                {"Slowpoke", 79}, {"Slowbro", 80}, {"Magnemite", 81}, {"Magneton", 82}, {"Farfetch'd", 83}, {"Doduo", 84},
+                {"Dodrio", 85}, {"Seel", 86}, {"Dewgong", 87}, {"Grimer", 88}, {"Muk", 89}, {"Shellder", 90},
+                {"Cloyster", 91}, {"Gastly", 92}, {"Haunter", 93}, {"Gengar", 94}, {"Onix", 95}, {"Drowzee", 96},
+                {"Hypno", 97}, {"Krabby", 98}, {"Kingler", 99}, {"Voltorb", 100}, {"Electrode", 101}, {"Exeggcute", 102},
+                {"Exeggutor", 103}, {"Cubone", 104}, {"Marowak", 105}, {"Hitmonlee", 106}, {"Hitmonchan", 107}, {"Lickitung", 108},
+                {"Koffing", 109}, {"Weezing", 110}, {"Rhyhorn", 111}, {"Rhydon", 112}, {"Chansey", 113}, {"Tangela", 114},
+                {"Kangaskhan", 115}, {"Horsea", 116}, {"Seadra", 117}, {"Goldeen", 118}, {"Seaking", 119}, {"Staryu", 120},
+                {"Starmie", 121}, {"Mr. Mime", 122}, {"Scyther", 123}, {"Jynx", 124}, {"Electabuzz", 125}, {"Magmar", 126},
+                {"Pinsir", 127}, {"Tauros", 128}, {"Magikarp", 129}, {"Gyarados", 130}, {"Lapras", 131}, {"Ditto", 132},
+                {"Eevee", 133}, {"Vaporeon", 134}, {"Jolteon", 135}, {"Flareon", 136}, {"Porygon", 137}, {"Omanyte", 138},
+                {"Omastar", 139}, {"Kabuto", 140}, {"Kabutops", 141}, {"Aerodactyl", 142}, {"Snorlax", 143}, {"Articuno", 144},
+                {"Zapdos", 145}, {"Moltres", 146}, {"Dratini", 147}, {"Dragonair", 148}, {"Dragonite", 149}, {"Mewtwo", 150}
+        };
+
+        string pokemonName = searchQuery;
+        size_t quantityPos = pokemonName.find( "x");
+        if (quantityPos != string::npos)
+            pokemonName = pokemonName.substr(0, quantityPos);
+        // Finding the Pokemon number from the name
+        auto pokenumIter= pokemonNumbers.find(pokemonName);
+        if (pokenumIter == pokemonNumbers.end()) {
+            // Case for Pokemon not found in the map
+            cardDisplay.setTexture(nullptr);
+            return;
+        }
+
+        // Constructing the file path to the Pokémon card image
+        int pokemonNumber = pokenumIter->second;
+        string filePath = "./cmake-build-debug/150 G1 Pokemon Cards/" + to_string(pokemonNumber)+ ".png";
+
+        // Checking if the texture has already been loaded
+        if (cardTextures.find(pokemonName) == cardTextures.end()) {
+            // Loading texture
+            Texture newTexture;
+            if (!newTexture.loadFromFile(filePath)) {
+                cout << "Failed to load texture.";
+                cardDisplay.setTexture(nullptr);
+                return;
+            }
+
+            // Caching the texture
+            cardTextures[pokemonName] = newTexture;
+        }
+
+        // Set the texture on the card display
+        cardDisplay.setTexture(&cardTextures[pokemonName]);
+    }
+
     void updateScreen(RenderWindow& window, Font& font, RectangleShape& cardDisplay, RectangleShape& cardResults, RectangleShape& searchBox, RectangleShape& search_button, RectangleShape& searchResults, RectangleShape& vendorBox, RectangleShape& vendorResults, Event& currentEvent, string& newCardName, float& scrollOffset){
         // Clear window before drawing
         window.clear(Color::White);
@@ -405,36 +480,15 @@ public:
         window.draw(vendorBox);
         window.draw(vendorResults);
 
-        // Draw card placeholder
-        Text cardPlaceholder("Card Image", font, 30);
-        cardPlaceholder.setFillColor(Color::Black);
-        cardPlaceholder.setPosition(cardDisplay.getPosition().x + cardDisplay.getSize().x/2 - 80,
-                                    cardDisplay.getPosition().y + cardDisplay.getSize().y/2 - 15);
-        window.draw(cardPlaceholder);
-
-        // Draw vendor title
-        Text vendorsText("Vendors", font, 18);
-        vendorsText.setFillColor(Color::Black);
-        vendorsText.setPosition(vendorBox.getPosition().x + 60, vendorBox.getPosition().y + 8);
-        window.draw(vendorsText);
-
-        // Draw search button text
-        Text searchButtonText("S", font, 16);
-        searchButtonText.setFillColor(Color::Black);
-        searchButtonText.setPosition(search_button.getPosition().x + 7, search_button.getPosition().y + 5);
-        window.draw(searchButtonText);
-
-        // Draw card result information
-        Text resultsInfoText("There are XX results for [CARD]", font, 16);
-        resultsInfoText.setFillColor(Color::Black);
-        resultsInfoText.setPosition(cardResults.getPosition().x + 15, cardResults.getPosition().y + 15);
-        window.draw(resultsInfoText);
-
         // Draw search box input state
         drawSearchInput(window, searchBox, font);
 
         // Update and draw search results
         updateSearchResults(window, searchResults, font, newCardName, currentEvent, scrollOffset);
+
+        // Update the cardDisplay if a user has searched for a new card
+        if (!newCardName.empty())
+            updateCardDisplay(window, cardDisplay, newCardName);
 
         // Update the display
         window.display();
