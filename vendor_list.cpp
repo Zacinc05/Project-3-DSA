@@ -122,7 +122,7 @@ unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> ge
     uniform_real_distribution<> shipping_dist(0.0, 20.0);
 
     // Actual list of vendor data to be returned after function execution
-    unordered_map<std::string, std::unordered_map<std::string, std::pair<std::pair<double, double>, int>>> vendor_data;
+    unordered_map<std::string, unordered_map<string, pair<pair<double, double>, int>>> vendor_data;
 
     // Hardcoded list of Pokémon cards along with their average MSRP for being first-generation and ungraded
     vector<pair<string, double>> pokemon = {

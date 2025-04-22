@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Font.hpp>
 using namespace sf;
@@ -36,6 +37,7 @@ class ApplicationWindow{
     // Variables
     string newCardName;
     string currentCardToDisplay;
+    string vendorResultsString;
     float scrollOffset;
     // State variables (static)
     enum InputState{entering_card_name, entering_quantity};
@@ -427,7 +429,7 @@ public:
         int pokemonNumber = pokenumIter->second;
         string filePath = "./G1-Pokemon/" + to_string(pokemonNumber) + ".jpg";
 
-        if (this->cardTextures.find(cardNameToDisplay) == this->cardTextures.end()) { // Check MEMBER cache
+        if (this->cardTextures.find(cardNameToDisplay) == this->cardTextures.end()){
             Texture newTexture;
             if (!newTexture.loadFromFile(filePath)) {
                 cout << "Failed to load texture file: " << filePath << endl;
@@ -440,11 +442,65 @@ public:
         try {
             cardDisplay.setTexture(&this->cardTextures.at(cardNameToDisplay), true);
             cardDisplay.setFillColor(Color::White);
-        } catch (const std::out_of_range& oor) {
+        } catch (const out_of_range& oor) {
             cerr << "Error accessing texture cache for: " << cardNameToDisplay << endl;
             cardDisplay.setTexture(nullptr);
             cardDisplay.setFillColor(Color::White);
         }
+    }
+
+    void setVendorInfo(const string& vendor_info){
+        vendorResultsString = vendor_info;
+    }
+
+    void displayVendorResults(){
+        Text vendorText;
+        vendorText.setFont(font);
+        vendorText.setString(vendorResultsString);
+        vendorText.setCharacterSize(14);
+        vendorText.setFillColor(Color::Black);
+
+        float textPadding = 10.0f;
+        vendorText.setPosition(vendorResults.getPosition().x + textPadding,vendorResults.getPosition().y + textPadding);
+
+        string wrappedString;
+        string currentLine;
+        string word;
+        float maxWidth = vendorResults.getSize().x - 2 * textPadding;
+
+        Text tempText("", font, vendorText.getCharacterSize());
+        stringstream ss(vendorResultsString);
+
+        while (ss >> word) {
+            // Reading string input
+            tempText.setString(currentLine + (!currentLine.empty() ? " " : "") + word);
+            if (tempText.getLocalBounds().width > maxWidth) {
+                if (!currentLine.empty()) {
+                    wrappedString += currentLine + "\n";
+                    currentLine = word;
+                } else {
+                    wrappedString += word + "\n";
+                    currentLine = "";
+                }
+            } else {
+                if (!currentLine.empty()) {
+                    currentLine += " ";
+                }
+                currentLine += word;
+            }
+        }
+        wrappedString += currentLine;
+        vendorText.setString(wrappedString);
+        vendorText.setPosition(vendorResults.getPosition().x + textPadding,vendorResults.getPosition().y + textPadding);
+
+        // Clipping view (Reused from updateSearchResults)
+        View originalView = window.getView();
+        View vendorView(FloatRect(vendorResults.getPosition().x + textPadding,vendorResults.getPosition().y + textPadding,maxWidth,vendorResults.getSize().y - 2 * textPadding));
+        vendorView.setViewport(FloatRect(vendorResults.getPosition().x / window.getSize().x,vendorResults.getPosition().y / window.getSize().y,vendorResults.getSize().x / window.getSize().x,vendorResults.getSize().y / window.getSize().y));
+
+        window.setView(vendorView);
+        window.draw(vendorText);
+        window.setView(originalView);
     }
 
     void updateScreen(Event &currentEvent){
@@ -477,6 +533,7 @@ public:
         drawSearchInput();
         updateSearchResults(currentEvent);
         updateCardDisplay(currentCardToDisplay);
+        displayVendorResults();
         window.draw(cardDisplay);
 
         window.display();
