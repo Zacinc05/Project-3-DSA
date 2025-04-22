@@ -7,6 +7,7 @@
 #include <tuple>
 #include <ctime>
 #include <regex>
+#include <sstream>
 using namespace std;
 
 int main()
@@ -80,47 +81,51 @@ int main()
     clock_t b_start = clock();
     pair<double,int> best_fit_sum = best_fit_algorithm(filtered_data, item_addition_order, best_fit_unavailable_items, reviews);
     clock_t b_end = clock();
-    double b_time = static_cast<double>(b_end - b_start) / CLOCKS_PER_SEC;
+    double b_time = static_cast<double>(b_end - b_start) * 1000 / CLOCKS_PER_SEC;
 
     cout << endl << endl << "--------------------------------------------------------------------------------------" << endl << endl << endl;
 
     clock_t f_start = clock();
     pair<double,int> first_fit_sum = first_fit_algorithm(filtered_data, item_addition_order, first_fit_unavailable_items, listings, reviews);
     clock_t f_end = clock();
-    double f_time = static_cast<double>(f_end - f_start) / CLOCKS_PER_SEC;
+    double f_time = static_cast<double>(f_end - f_start) * 1000 / CLOCKS_PER_SEC;
 
     cout << endl << endl << "--------------------------------------------------------------------------------------" << endl << endl << endl;
 
-    if(!best_fit_unavailable_items.empty()) {
-        cout << "There are " << best_fit_unavailable_items.size() << " items that dont have enough in stock" << endl << endl;
+    ostringstream oss;
 
-        for (auto item : best_fit_unavailable_items) {
-            cout << item.first << ": " << item.second << " missing." << endl;
+    if (!best_fit_unavailable_items.empty()) {
+        oss << "There are " << best_fit_unavailable_items.size() << " items that don't have enough in stock\n\n";
+        for (const auto& item : best_fit_unavailable_items) {
+            oss << item.first << ": " << item.second << " missing.\n";
         }
-        cout << endl;
+        oss << "\n";
     } else {
-        cout << "All items were added to stock." << endl;
-    }
-    cout << "Your Total:" << endl << "$";
-    cout << fixed << setprecision(2) << best_fit_sum.first << endl;
-    cout << "Number of vendors to ship items: " << best_fit_sum.second << endl;
-    cout << setprecision(5) << "Time to calculate: " << b_time << " seconds." << endl;
-
-    if(!first_fit_unavailable_items.empty()) {
-        cout << "There are " << first_fit_unavailable_items.size() << " items that dont have enough in stock" << endl << endl;
-
-        for (auto item : first_fit_unavailable_items) {
-            cout << item.first << ": " << item.second << " missing." << endl;
-        }
-        cout << endl;
-    } else {
-        cout << "All items were added to stock." << endl;
+        oss << "All items were added to stock.\n";
     }
 
-    cout << "Your Total:" << endl << "$";
-    cout << fixed << setprecision(2) << first_fit_sum.first << endl;
-    cout << "Number of vendors to ship items: " << first_fit_sum.second << endl;
-    cout << setprecision(5) << "Time to calculate: " << f_time << " seconds." << endl;
+    oss << "Your Total for Best Fit:\n$";
+    oss << fixed << setprecision(2) << best_fit_sum.first << "\n";
+    oss << "Number of vendors to ship items: " << best_fit_sum.second << "\n";
+    oss << setprecision(5) << "Time to calculate: " << b_time << " milliseconds.\n\n";
+
+    if (!first_fit_unavailable_items.empty()) {
+        oss << "There are " << first_fit_unavailable_items.size() << " items that don't have enough in stock\n\n";
+        for (const auto& item : first_fit_unavailable_items) {
+            oss << item.first << ": " << item.second << " missing.\n";
+        }
+        oss << "\n";
+    } else {
+        oss << "All items were added to stock.\n";
+    }
+
+    oss << "Your Total for Best Fit:\n$";
+    oss << fixed << setprecision(2) << first_fit_sum.first << "\n";
+    oss << "Number of vendors to ship items: " << first_fit_sum.second << "\n";
+    oss << setprecision(5) << "Time to calculate: " << f_time << " milliseconds.\n";
+
+    string output_text = oss.str();
+    cout << output_text << endl;
 
     return 0;
 }
