@@ -9,7 +9,13 @@
 #include <regex>
 using namespace std;
 
-int main()
+int main(){
+    ApplicationWindow window;
+    window.initializeApplicationWindow();
+    window.applicationRun();
+}
+
+/*int main()
 {
     string add_item, quantity;
     int star_rating, number_of_sales;
@@ -123,4 +129,4 @@ int main()
     cout << setprecision(5) << "Time to calculate: " << f_time << " seconds." << endl;
 
     return 0;
-}
+}*/

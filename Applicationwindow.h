@@ -33,12 +33,6 @@ class ApplicationWindow{
     RectangleShape vendorBox;
     RectangleShape vendorResults;
 
-    /*
-    // Text elements
-    Text initialSearch;
-    Text vendorsText;
-    Text cardPlaceholder;*/
-
     // Variables
     string newCardName;
     string currentCardToDisplay;
@@ -57,70 +51,85 @@ public:
     ApplicationWindow() : scrollOffset(0.0f){}
 
     void initializeApplicationWindow(){
-        const unsigned int window_width = 1000;
+        const unsigned int window_width = 1200;
         const unsigned int window_height = 900;
+        const float padding = 20.0f;
 
-        // Creating the main window
         window.create(VideoMode(window_width, window_height), "Opti-Cart");
         window.setFramerateLimit(60);
 
-        // Loading font
-        if (!this->font.loadFromFile("C:/Windows/Fonts/arial.ttf")){
-            cout << "Font loading failure. Check path: C:/Windows/Fonts/arial.ttf" << endl;
-        }
+        if (!this->font.loadFromFile("./Files/LSANS.TTF"))
+            cout << "Font loading failure. Check path." << endl;
 
-        // Card Display
-        cardDisplay.setSize(Vector2f(509, 700));
-        cardDisplay.setPosition((window_width - 509.0f) / 2, 100);
+
+        // Rectangle sizes
+        Vector2f searchBoxSize(200, 40);
+        Vector2f searchButtonSize(40, 40);
+        Vector2f vendorBoxSize(300, 40);
+        Vector2f cardDisplaySize(480, 670);
+        Vector2f searchResultsSize(220, cardDisplaySize.y);
+        Vector2f vendorResultsSize(vendorBoxSize.x, cardDisplaySize.y);
+        Vector2f cardResultsCountSize(cardDisplaySize.x, 100);
+
+        // UI calculations
+        float topRowY = padding;
+        Vector2f searchBoxPos(padding, topRowY);
+        Vector2f searchButtonPos(searchBoxPos.x + searchBoxSize.x + 10, topRowY);
+        Vector2f vendorBoxPos(window_width - padding - vendorBoxSize.x, topRowY);
+        float mainContentY = topRowY + searchBoxSize.y + padding;
+        Vector2f searchResultsPos(padding, mainContentY);
+        Vector2f vendorResultsPos(vendorBoxPos.x, mainContentY);
+        float spaceBetweenColumns = vendorResultsPos.x - (searchResultsPos.x + searchResultsSize.x);
+        float cardDisplayX = searchResultsPos.x + searchResultsSize.x + (spaceBetweenColumns - cardDisplaySize.x) / 2.0f;
+        Vector2f cardDisplayPos(cardDisplayX, mainContentY);
+        float bottomRowY = mainContentY + cardDisplaySize.y + padding;
+        Vector2f cardResultsCountPos(cardDisplayPos.x, bottomRowY);
+
+        searchBox.setSize(searchBoxSize);
+        searchBox.setPosition(searchBoxPos);
+        searchBox.setOutlineColor(Color::Black);
+        searchBox.setOutlineThickness(3);
+        searchBox.setFillColor(Color::White);
+
+        search_button.setSize(searchButtonSize);
+        search_button.setPosition(searchButtonPos);
+        search_button.setOutlineColor(Color::Black);
+        search_button.setOutlineThickness(3);
+        search_button.setFillColor(Color(230, 230, 230));
+
+        vendorBox.setSize(vendorBoxSize);
+        vendorBox.setPosition(vendorBoxPos);
+        vendorBox.setOutlineColor(Color::Black);
+        vendorBox.setOutlineThickness(3);
+        vendorBox.setFillColor(Color::White);
+
+        searchResults.setSize(searchResultsSize);
+        searchResults.setPosition(searchResultsPos);
+        searchResults.setOutlineColor(Color::Black);
+        searchResults.setOutlineThickness(3);
+        searchResults.setFillColor(Color(245, 245, 245));
+
+        cardDisplay.setSize(cardDisplaySize);
+        cardDisplay.setPosition(cardDisplayPos);
         cardDisplay.setOutlineColor(Color::Black);
         cardDisplay.setOutlineThickness(3);
         cardDisplay.setFillColor(Color::White);
 
-        // Card Results
-        cardResults.setSize(Vector2f(300, 50));
-        cardResults.setPosition((window_width - 300.0f) / 2, 820);
+        vendorResults.setSize(vendorResultsSize);
+        vendorResults.setPosition(vendorResultsPos);
+        vendorResults.setOutlineColor(Color::Black);
+        vendorResults.setOutlineThickness(3);
+        vendorResults.setFillColor(Color(245, 245, 245));
+
+        cardResults.setSize(cardResultsCountSize);
+        cardResults.setPosition(cardResultsCountPos);
         cardResults.setOutlineColor(Color::Black);
-        cardResults.setOutlineThickness(2);
+        cardResults.setOutlineThickness(3);
         cardResults.setFillColor(Color::White);
 
-        // Search Box
-        searchBox.setSize(Vector2f(200, 40));
-        searchBox.setPosition(40, 50);
-        searchBox.setOutlineColor(Color::Black);
-        searchBox.setOutlineThickness(2);
-        searchBox.setFillColor(Color::White);
-
-        // Search Button
-        search_button.setSize(Vector2f(30, 30));
-        search_button.setPosition(250, 55);
-        search_button.setOutlineColor(Color::Black);
-        search_button.setOutlineThickness(1);
-        search_button.setFillColor(Color(230, 230, 230));
-
-        // Search Results
-        searchResults.setSize(Vector2f(200, 300));
-        searchResults.setPosition(40, 100);
-        searchResults.setOutlineColor(Color::Black);
-        searchResults.setOutlineThickness(2);
-        searchResults.setFillColor(Color(245, 245, 245));
-
-        // Vendor Box
-        vendorBox.setSize(Vector2f(200, 40));
-        vendorBox.setPosition(window_width - 240.0f, 50);
-        vendorBox.setOutlineColor(Color::Black);
-        vendorBox.setOutlineThickness(2);
-        vendorBox.setFillColor(Color::White);
-
-        // Vendor Results
-        vendorResults.setSize(Vector2f(200, 300));
-        vendorResults.setPosition(window_width - 240.0f, 100);
-        vendorResults.setOutlineColor(Color::Black);
-        vendorResults.setOutlineThickness(2);
-        vendorResults.setFillColor(Color::White);
-
-        // Variables for search functionality
-        string newCardName = "";
-        float scrollOffset = 0.0f;
+        newCardName = "";
+        currentCardToDisplay = "";
+        scrollOffset = 0.0f;
     }
 
     void updateSearchResults(Event &currentEvent){
@@ -147,18 +156,17 @@ public:
         }
 
         // Calculate max scroll offset based on current content height
-        float contentHeight = savedCards.size() * (card_display_height + card_padding); // Total height of all items
-        float viewHeight = searchResults.getSize().y - (2 * container_padding); // Visible area height
-        float maxScroll = max(0.0f, contentHeight - viewHeight); // Max scroll is difference, or 0 if content fits
+        float contentHeight = savedCards.size() * (card_display_height + card_padding);
+        float viewHeight = searchResults.getSize().y - (2 * container_padding);
+        float maxScroll = max(0.0f, contentHeight - viewHeight);
 
         // Handle mouse wheel scrolling only if the mouse is over the searchResults area
         if (currentEvent.type == Event::MouseWheelScrolled && currentEvent.mouseWheelScroll.wheel == Mouse::VerticalWheel){
-            Vector2i mousePos = Mouse::getPosition(window); // Use member window
-            if (searchResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))){ // Use member searchResults shape
-                // Scroll calculation: adjust member scrollOffset
-                scrollOffset -= currentEvent.mouseWheelScroll.delta * 20.f; // Adjust scroll speed as needed
+            Vector2i mousePos = Mouse::getPosition(window);
+            if (searchResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))){
+                scrollOffset -= currentEvent.mouseWheelScroll.delta * 20.f;
                 // Constraining scroll limits
-                scrollOffset = max(0.0f, min(scrollOffset, maxScroll)); // Clamp between 0 and maxScroll
+                scrollOffset = max(0.0f, min(scrollOffset, maxScroll));
             }
         }
 
@@ -181,7 +189,7 @@ public:
 
                     // Check if the adjusted relative mouse position is inside this remove button's rectangle
                     if (removeRect.contains(mousePosRelative)){
-                        savedCards.erase(savedCards.begin() + i); // Remove the card from the list
+                        savedCards.erase(savedCards.begin() + i);
 
                         // After removing, recalculate maxScroll
                         contentHeight = savedCards.size() * (card_display_height + card_padding);
@@ -190,7 +198,7 @@ public:
                         // Adjust scrollOffset if it's now past the new maxScroll
                         scrollOffset = min(scrollOffset, maxScroll);
                     } else{
-                        currentCardY += card_display_height + card_padding; // Advance Y position
+                        currentCardY += card_display_height + card_padding;
                         i++;
                     }
                 }
@@ -265,7 +273,7 @@ public:
             // Check if click is inside the searchBox rectangle shape
             isSearchBoxActive = searchBox.getGlobalBounds().contains(static_cast<Vector2f>(mousePos));
             if(isSearchBoxActive) {
-                showCursorState = true; // Reset cursor blink upon activation
+                showCursorState = true;
                 cursorBlinkClock.restart();
             }
         }
@@ -279,13 +287,13 @@ public:
                 } else if (currentInputState == entering_quantity && !quantityInputString.empty()){
                     quantityInputString.pop_back();
                 } else if (currentInputState == entering_quantity && quantityInputString.empty()){
-                    currentInputState = entering_card_name; // Go back to previous state
+                    currentInputState = entering_card_name;
                 }
             }
             else if (event.text.unicode == 13){ // Enter
                 if (currentInputState == entering_card_name && !cardNameInputString.empty()){
                     currentInputState = static_cast<ApplicationWindow::InputState>(entering_quantity); // Move to quantity state
-                    quantityInputString.clear();         // Clear quantity for new input
+                    quantityInputString.clear();
                 }
                 else if (currentInputState == entering_quantity && !quantityInputString.empty()){
                     // Finalizing search string only when quantity is entered
@@ -349,7 +357,7 @@ public:
         inputText.setCharacterSize(16);
         inputText.setFillColor(Color::Black);
         // Calculating center position for text
-        float textPosY = searchBox.getPosition().y + (searchBox.getSize().y - inputText.getCharacterSize()) / 2.0f - 2; // Small adjustment often needed
+        float textPosY = searchBox.getPosition().y + (searchBox.getSize().y - inputText.getCharacterSize()) / 2.0f - 2;
         inputText.setPosition(searchBox.getPosition().x + 10, textPosY);
 
         // Show placeholder only if the box is inactive
@@ -362,9 +370,9 @@ public:
 
             // Set placeholder text based on the current input state
             if (currentInputState == entering_card_name){
-                placeholderText.setString("Type in a card.");
-            } else { // entering_quantity state (might be briefly visible if user clicks out)
-                placeholderText.setString("Enter quantity:");
+                placeholderText.setString("Enter a card name!");
+            } else {
+                placeholderText.setString("Enter a quantity!");
             }
             window.draw(placeholderText);
         } else {
@@ -411,7 +419,7 @@ public:
 
         auto pokenumIter = pokemonNumbers.find(cardNameToDisplay);
         if (pokenumIter == pokemonNumbers.end()) {
-            cout << "Pokemon card image not found for: " << cardNameToDisplay << endl;
+            cout << "Pokemon card not found for: " << cardNameToDisplay << endl;
             cardDisplay.setTexture(nullptr);
             cardDisplay.setFillColor(Color::White);
             return;
@@ -448,52 +456,28 @@ public:
         window.draw(search_button);
         window.draw(vendorBox);
         window.draw(vendorResults);
-        window.draw(cardDisplay);
 
-        // Draw card placeholder text *only if* no card texture is set
-        if (cardDisplay.getTexture() == nullptr) {
-            Text cardPlaceholderText("Card Image", font, 30); // Use member font
-            cardPlaceholderText.setFillColor(Color(180, 180, 180)); // Lighter color for placeholder
-            FloatRect textBounds = cardPlaceholderText.getLocalBounds();
-            // Center the placeholder text within the cardDisplay area
-            cardPlaceholderText.setPosition(
-                    cardDisplay.getPosition().x + (cardDisplay.getSize().x - textBounds.width) / 2.0f - textBounds.left,
-                    cardDisplay.getPosition().y + (cardDisplay.getSize().y - textBounds.height) / 2.0f - textBounds.top
-            );
-            window.draw(cardPlaceholderText);
-        }
-
-        // Draw vendor title text
-        Text vendorsTextLabel("Vendors", font, 18); // Use member font
+        Text vendorsTextLabel("Your Opti-Cart", font, 18);
         vendorsTextLabel.setFillColor(Color::Black);
         FloatRect vendorTextBounds = vendorsTextLabel.getLocalBounds();
-        vendorsTextLabel.setPosition(
-                vendorBox.getPosition().x + (vendorBox.getSize().x - vendorTextBounds.width) / 2.0f - vendorTextBounds.left,
-                vendorBox.getPosition().y + (vendorBox.getSize().y - vendorTextBounds.height) / 2.0f - vendorTextBounds.top + 2 // Small adjustment
-        );
+        vendorsTextLabel.setPosition(vendorBox.getPosition().x + (vendorBox.getSize().x - vendorTextBounds.width) / 2.0f - vendorTextBounds.left,vendorBox.getPosition().y + (vendorBox.getSize().y - vendorTextBounds.height) / 2.0f - vendorTextBounds.top + 2);
         window.draw(vendorsTextLabel);
 
-        // Draw search button text (e.g., magnifying glass icon or 'S')
-        Text searchButtonTextLabel("S", font, 20); // Use member font
+        Text searchButtonTextLabel("S", font, 20);
         searchButtonTextLabel.setFillColor(Color::Black);
         FloatRect searchBtnTxtBounds = searchButtonTextLabel.getLocalBounds();
-        searchButtonTextLabel.setPosition(
-                search_button.getPosition().x + (search_button.getSize().x - searchBtnTxtBounds.width) / 2.0f - searchBtnTxtBounds.left,
-                search_button.getPosition().y + (search_button.getSize().y - searchBtnTxtBounds.height) / 2.0f - searchBtnTxtBounds.top
-        );
+        searchButtonTextLabel.setPosition(search_button.getPosition().x + (search_button.getSize().x - searchBtnTxtBounds.width) / 2.0f - searchBtnTxtBounds.left,search_button.getPosition().y + (search_button.getSize().y - searchBtnTxtBounds.height) / 2.0f - searchBtnTxtBounds.top);
         window.draw(searchButtonTextLabel);
 
-        // Draw card result information text (example placeholder)
-        Text resultsInfoTextLabel("Card search results count...", font, 16); // Use member font
+        Text resultsInfoTextLabel("Algorithms PLACEHOLDER", font, 16);
         resultsInfoTextLabel.setFillColor(Color::Black);
-        resultsInfoTextLabel.setPosition(
-                cardResults.getPosition().x + 15,
-                cardResults.getPosition().y + (cardResults.getSize().y - resultsInfoTextLabel.getCharacterSize()) / 2.0f);
+        resultsInfoTextLabel.setPosition(cardResults.getPosition().x + 15,cardResults.getPosition().y + (cardResults.getSize().y - resultsInfoTextLabel.getCharacterSize()) / 2.0f);
         window.draw(resultsInfoTextLabel);
 
         drawSearchInput();
         updateSearchResults(currentEvent);
         updateCardDisplay(currentCardToDisplay);
+        window.draw(cardDisplay);
 
         window.display();
     }
@@ -528,5 +512,5 @@ ApplicationWindow::InputState ApplicationWindow::currentInputState = Application
 string ApplicationWindow::cardNameInputString = "";
 string ApplicationWindow::quantityInputString = "";
 bool ApplicationWindow::isSearchBoxActive = false;
-Clock ApplicationWindow::cursorBlinkClock; // Default constructor is fine
-bool ApplicationWindow::showCursorState = true; // Or false, depending on desired start
+Clock ApplicationWindow::cursorBlinkClock;
+bool ApplicationWindow::showCursorState = true;
