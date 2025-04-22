@@ -1,0 +1,15 @@
+# libvorbis pkg-config source file
+
+prefix=C:/Program Files (x86)/Project_3_DSA
+exec_prefix=C:/Program Files (x86)/Project_3_DSA/bin
+libdir=C:/Program Files (x86)/Project_3_DSA/lib
+includedir=C:/Program Files (x86)/Project_3_DSA/include
+
+Name: vorbis
+Description: vorbis is the primary Ogg Vorbis library
+Version: 1.3.7
+Requires.private: ogg
+Conflicts:
+Libs: -L${libdir} -lvorbis 
+Libs.private: 
+Cflags: -I${includedir}

@@ -1,5 +1,6 @@
 #include "vendor_list.h"
 #include "use_algorithms.h"
+#include "Applicationwindow.h"
 #include <iostream>
 #include <iomanip>
 #include <queue>
@@ -7,7 +8,6 @@
 #include <ctime>
 #include <regex>
 using namespace std;
-
 
 int main()
 {

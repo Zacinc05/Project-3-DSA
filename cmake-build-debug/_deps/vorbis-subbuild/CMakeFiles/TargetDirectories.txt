@@ -1,0 +1,3 @@
+C:/Users/Marvens/Documents/GitHub/Project-3-DSA/cmake-build-debug/_deps/vorbis-subbuild/CMakeFiles/vorbis-populate.dir
+C:/Users/Marvens/Documents/GitHub/Project-3-DSA/cmake-build-debug/_deps/vorbis-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/Marvens/Documents/GitHub/Project-3-DSA/cmake-build-debug/_deps/vorbis-subbuild/CMakeFiles/rebuild_cache.dir
