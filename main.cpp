@@ -9,8 +9,15 @@
 #include <regex>
 #include <sstream>
 using namespace std;
+int main(){
+    // Main application loop is self contained here due to the main loop being implemented in Applicationwindow.h
+    ApplicationWindow optiCart;
+    optiCart.initializeApplicationWindow();
+    optiCart.applicationRun();
+    return 0;
+}
 
-int main()
+/*int main()
 {
     string add_item, quantity;
     int star_rating, number_of_sales;
@@ -128,4 +135,4 @@ int main()
     cout << output_text << endl;
 
     return 0;
-}
+}*/

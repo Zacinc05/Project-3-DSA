@@ -1,18 +1,20 @@
-//
-// Created by Marvens on 4/19/2025.
-//
-
 #ifndef PROJECT_3_DSA_APPLICATIONWINDOW_H
 #define PROJECT_3_DSA_APPLICATIONWINDOW_H
 
 #endif //PROJECT_3_DSA_APPLICATIONWINDOW_H
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <use_algorithms.h>
+#include <vendor_list.h>
 using namespace sf;
 using namespace std;
 
@@ -38,19 +40,40 @@ class ApplicationWindow{
     string newCardName;
     string currentCardToDisplay;
     string vendorResultsString;
+    string cardResultsString;
     float scrollOffset;
+    float cardResultsScrollOffset;
+    float vendorResultsScrollOffset;
+
     // State variables (static)
-    enum InputState{entering_card_name, entering_quantity};
+    enum InputState{entering_vendor_ratings, entering_vendor_sales, entering_card_name, entering_quantity};
     static InputState currentInputState;
+    static string vendorRatingString;
+    static string vendorSalesString;
     static string cardNameInputString;
     static string quantityInputString;
     static bool isSearchBoxActive;
     static Clock cursorBlinkClock;
     static bool showCursorState;
 
+    // Algorithm variables
+    string add_item, quantity;
+    int star_rating, number_of_sales;
+    priority_queue<tuple<double, int, string>> item_addition_order;
+    unordered_map<string, double> listings = standard_market_price();
+    vector<pair<string,int>> first_fit_unavailable_items;
+    vector<pair<string,int>> best_fit_unavailable_items;
+
+    // Creates info on star ratings and # of sales for each vendor
+    unordered_map<string, pair<double, int>> reviews = vendor_trust();
+
+    // Creates the vendor data and also creates a filtered list of vendors
+    unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> vendor_data = get_vendor_data();
+    unordered_map<string, unordered_map<string, pair<pair<double, double>, int>>> filtered_data;
+
 public:
     // Constructor
-    ApplicationWindow() : scrollOffset(0.0f){}
+    ApplicationWindow() : scrollOffset(0.0f), cardResultsScrollOffset(0.0f), vendorResultsScrollOffset(0.0f){}
 
     void initializeApplicationWindow(){
         const unsigned int window_width = 1200;
@@ -265,12 +288,12 @@ public:
         window.setView(originalView);
     }
 
-    string searchBoxInput(const Event &event){
+    string searchBoxInput(const Event &currentEvent){
         // Tracking the input state
         string result = "";
 
         // Check for mouse click to activate/deactivate search box
-        if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left){
+        if (currentEvent.type == Event::MouseButtonPressed && currentEvent.mouseButton.button == Mouse::Left){
             Vector2i mousePos = Mouse::getPosition(window); // Use member window
             // Check if click is inside the searchBox rectangle shape
             isSearchBoxActive = searchBox.getGlobalBounds().contains(static_cast<Vector2f>(mousePos));
@@ -281,56 +304,78 @@ public:
         }
 
         // Handle text entry only if the search box is active
-        if (isSearchBoxActive && event.type == Event::TextEntered){
-            char enteredChar = static_cast<char>(event.text.unicode);
-            if (event.text.unicode == 8){ //Backspace
-                if (currentInputState == entering_card_name && !cardNameInputString.empty()){
+        if (isSearchBoxActive && currentEvent.type == Event::TextEntered){
+            char enteredChar = static_cast<char>(currentEvent.text.unicode);
+            if (currentEvent.text.unicode == 8){ //Backspace
+                if (currentInputState == entering_vendor_ratings && !vendorRatingString.empty()){
+                    vendorRatingString.pop_back();
+                }
+                else if (currentInputState == entering_vendor_sales && !vendorSalesString.empty()){
+                    vendorSalesString.pop_back();
+                }
+                else if (currentInputState == entering_card_name && !cardNameInputString.empty())
                     cardNameInputString.pop_back();
-                } else if (currentInputState == entering_quantity && !quantityInputString.empty()){
+                }
+            else if (currentInputState == entering_quantity && !quantityInputString.empty()){
                     quantityInputString.pop_back();
-                } else if (currentInputState == entering_quantity && quantityInputString.empty()){
-                    currentInputState = entering_card_name;
                 }
-            }
-            else if (event.text.unicode == 13){ // Enter
-                if (currentInputState == entering_card_name && !cardNameInputString.empty()){
-                    currentInputState = static_cast<ApplicationWindow::InputState>(entering_quantity); // Move to quantity state
-                    quantityInputString.clear();
-                }
-                else if (currentInputState == entering_quantity && !quantityInputString.empty()){
-                    // Finalizing search string only when quantity is entered
-                    result = cardNameInputString + " (x" + quantityInputString + ")";
-                    // Clear for next search
-                    cardNameInputString.clear();
-                    quantityInputString.clear();
-                    currentInputState = static_cast<ApplicationWindow::InputState>(entering_card_name);
-                }
-                else if (currentInputState == entering_quantity && quantityInputString.empty() && !cardNameInputString.empty()){
-                    result = cardNameInputString;
-                    cardNameInputString.clear();
-                    currentInputState = static_cast<ApplicationWindow::InputState>(entering_card_name);
-                }
-            }
-            else if (event.text.unicode < 128 && event.text.unicode >= 32){ // Normal chars
-                if (currentInputState == entering_card_name){
+            else if (currentEvent.text.unicode < 128 && currentEvent.text.unicode >= 32){ // Normal chars
+                if (currentInputState == entering_vendor_ratings){
+                    vendorRatingString += enteredChar;
+                } else if (currentInputState == entering_vendor_sales){
+                    vendorSalesString += enteredChar;
+                } else if (currentInputState == entering_card_name){
                     cardNameInputString += enteredChar;
                 } else if (currentInputState == entering_quantity){
-                    // Allow only numerical digits for quantity
-                    if (enteredChar >= '0' && enteredChar <= '9'){
-                        quantityInputString += enteredChar;
-                    }
+                    quantityInputString += enteredChar;
                 }
             }
             // Reset cursor blink timer on any valid input action
             showCursorState = true;
             cursorBlinkClock.restart();
         }
-        else if (isSearchBoxActive && event.type == Event::KeyPressed && event.key.code == Keyboard::Escape){ // Escape key
-            if(currentInputState == entering_quantity){
-                quantityInputString.clear();
-                currentInputState = entering_card_name;
-            } else {
+        else if (isSearchBoxActive && currentEvent.type == Event::KeyPressed && currentEvent.key.code == Keyboard::Enter){
+            if (currentInputState == entering_vendor_ratings && !vendorRatingString.empty()){
+                star_rating = stoi(vendorRatingString);
+                vendorSalesString.clear();
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_vendor_sales);
+            }
+            else if (currentInputState == entering_vendor_sales && !vendorSalesString.empty()){
+                number_of_sales = stoi(vendorSalesString);
                 cardNameInputString.clear();
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_card_name);
+            }
+            else if (currentInputState == entering_card_name && !cardNameInputString.empty()){
+                add_item = cardNameInputString;
+                string vendor_listings = vendor_card_info(vendor_data[add_item], reviews);
+                vendorResultsString += vendor_listings;
+                quantityInputString.clear();
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_quantity);
+            }
+            else if (currentInputState == entering_quantity && !quantityInputString.empty()){
+                result = cardNameInputString + " (x" + quantityInputString + ")";
+                quantity = quantityInputString;
+                item_addition_order.push({stoi(quantity) * listings[add_item], stoi(quantity), add_item});
+                vendorRatingString.clear();
+                vendorSalesString.clear();
+                cardNameInputString.clear();
+                quantityInputString.clear();
+                // Reset state to the beginning
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_vendor_ratings);
+            }
+        }
+        else if (isSearchBoxActive && currentEvent.type == Event::KeyPressed && currentEvent.key.code == Keyboard::Escape){ // Escape key
+            if (currentInputState == entering_quantity) {
+                quantityInputString.clear();
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_card_name);
+            } else if (currentInputState == entering_card_name){
+                cardNameInputString.clear();
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_vendor_sales);
+            } else if (currentInputState == entering_vendor_sales){
+                vendorSalesString.clear();
+                currentInputState = static_cast<ApplicationWindow::InputState>(entering_vendor_ratings);
+            } else{
+                vendorRatingString.clear();
                 isSearchBoxActive = false;
             }
         }
@@ -345,8 +390,16 @@ public:
             cursorBlinkClock.restart();
         }
         // Determining inputState
-        string& currentInputRef = (currentInputState == entering_card_name) ? cardNameInputString : quantityInputString;
-        string displayString = currentInputRef;
+        string displayString;
+        if (currentInputState == entering_vendor_ratings) {
+            displayString = vendorRatingString;
+        } else if (currentInputState == entering_vendor_sales) {
+            displayString = vendorSalesString;
+        } else if (currentInputState == entering_card_name) {
+            displayString = cardNameInputString;
+        } else if (currentInputState == entering_quantity) {
+            displayString = quantityInputString;
+        }
 
         // Add blinking cursor character "|" if the box is active
         if (isSearchBoxActive && showCursorState){
@@ -362,8 +415,10 @@ public:
         float textPosY = searchBox.getPosition().y + (searchBox.getSize().y - inputText.getCharacterSize()) / 2.0f - 2;
         inputText.setPosition(searchBox.getPosition().x + 10, textPosY);
 
+        bool isCurrentInputEmpty = (currentInputState == entering_vendor_ratings && vendorRatingString.empty()) ||(currentInputState == entering_vendor_sales && vendorSalesString.empty()) ||(currentInputState == entering_card_name && cardNameInputString.empty()) ||(currentInputState == entering_quantity && quantityInputString.empty());
+
         // Show placeholder only if the box is inactive
-        if (currentInputRef.empty() && !isSearchBoxActive){
+        if (isCurrentInputEmpty && !isSearchBoxActive){
             Text placeholderText;
             placeholderText.setFont(font);
             placeholderText.setCharacterSize(16);
@@ -371,9 +426,13 @@ public:
             placeholderText.setPosition(searchBox.getPosition().x + 10, textPosY);
 
             // Set placeholder text based on the current input state
-            if (currentInputState == entering_card_name){
+            if (currentInputState == entering_vendor_ratings) {
+                placeholderText.setString("Enter a min rating!");
+            } else if (currentInputState == entering_vendor_sales) {
+                placeholderText.setString("Enter the min sales!");
+            } else if (currentInputState == entering_card_name) {
                 placeholderText.setString("Enter a card name!");
-            } else {
+            } else if (currentInputState == entering_quantity){
                 placeholderText.setString("Enter a quantity!");
             }
             window.draw(placeholderText);
@@ -449,54 +508,151 @@ public:
         }
     }
 
-    void setVendorInfo(const string& vendor_info){
-        vendorResultsString = vendor_info;
+    void setCardResults(const string& card_results){
+        cardResultsString = card_results;
     }
 
-    void displayVendorResults(){
+    void processAlgorithms(){
+        filtered_data = filtered_vendors(vendor_data, reviews, star_rating, number_of_sales);
+        // load copy of the vendor data, create empty list of vendors in my cart. value will be the lowest shipping cost from that vendor.
+        clock_t b_start = clock();
+        pair<double,int> best_fit_sum = best_fit_algorithm(filtered_data, item_addition_order, best_fit_unavailable_items, reviews);
+        clock_t b_end = clock();
+        double b_time = static_cast<double>(b_end - b_start) * 1000 / CLOCKS_PER_SEC;
+
+        clock_t f_start = clock();
+        pair<double,int> first_fit_sum = first_fit_algorithm(filtered_data, item_addition_order, first_fit_unavailable_items, listings, reviews);
+        clock_t f_end = clock();
+        double f_time = static_cast<double>(f_end - f_start) * 1000 / CLOCKS_PER_SEC;
+
+        ostringstream oss;
+
+        if (!best_fit_unavailable_items.empty()) {
+            oss << "There are " << best_fit_unavailable_items.size() << " items that don't have enough in stock\n\n";
+            for (const auto& item : best_fit_unavailable_items) {
+                oss << item.first << ": " << item.second << " missing.\n";
+            }
+            oss << "\n";
+        } else {
+            oss << "All items were added to stock.\n";
+        }
+
+        oss << "Your Total for Best Fit:\n$";
+        oss << fixed << setprecision(2) << best_fit_sum.first << "\n";
+        oss << "Number of vendors to ship items: " << best_fit_sum.second << "\n";
+        oss << setprecision(5) << "Time to calculate: " << b_time << " milliseconds.\n\n";
+
+        if (!first_fit_unavailable_items.empty()) {
+            oss << "There are " << first_fit_unavailable_items.size() << " items that don't have enough in stock\n\n";
+            for (const auto& item : first_fit_unavailable_items) {
+                oss << item.first << ": " << item.second << " missing.\n";
+            }
+            oss << "\n";
+        } else {
+            oss << "All items were added to stock.\n";
+        }
+
+        oss << "Your Total for First Fit:\n$";
+        oss << fixed << setprecision(2) << first_fit_sum.first << "\n";
+        oss << "Number of vendors to ship items: " << first_fit_sum.second << "\n";
+        oss << setprecision(5) << "Time to calculate: " << f_time << " milliseconds.\n";
+
+
+        string output_text = oss.str();
+        setCardResults(output_text);
+    }
+
+    void displayCardResults(const Event &currentEvent){
+        // This method has a pretty similar implementation to the updateSearchResults method, since it's meant to prevent
+        // The output from clipping out of bounds from the rectangle
+        const float padding = 10.0f;
+        const float scrollSpeed = 25.0f;
+
+        Text resultsText;
+        resultsText.setFont(font);
+        resultsText.setString(cardResultsString);
+        resultsText.setCharacterSize(16);
+        resultsText.setFillColor(sf::Color::Black);
+        resultsText.setPosition(cardResults.getPosition().x + padding,cardResults.getPosition().y + padding);
+
+        // Calculating scroll limits
+        float totalTextHeight = resultsText.getGlobalBounds().height + resultsText.getLocalBounds().top;
+        float viewHeight = cardResults.getSize().y - (2 * padding);
+        float maxScroll = std::max(0.0f, totalTextHeight - viewHeight);
+
+        // Scrolling input
+        if (currentEvent.type == Event::MouseWheelScrolled && currentEvent.mouseWheelScroll.wheel == Mouse::VerticalWheel) {
+            // Check if mouse is over the cardResults rectangle
+            Vector2i mousePos = Mouse::getPosition(window);
+            if (cardResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                // Adjusting scroll offset
+                cardResultsScrollOffset -= currentEvent.mouseWheelScroll.delta * scrollSpeed;
+                // Clamping scroll offset
+                if (cardResultsScrollOffset < 0.0f) {
+                    cardResultsScrollOffset = 0.0f;
+                } else if (cardResultsScrollOffset > maxScroll) {
+                    cardResultsScrollOffset = maxScroll;
+                }
+            }
+        }
+
+        // Clipping view (storing the OG view first to reapply later)
+        View originalView = window.getView();
+
+        // Defining the coordinates and size of the cardResults rectangle
+        float viewPosX = cardResults.getPosition().x + padding;
+        float viewPosY = cardResults.getPosition().y + padding;
+        float viewWidth = cardResults.getSize().x - (2 * padding);
+
+        // Creating the view
+        View resultsView;
+        resultsView.setSize(viewWidth, viewHeight);
+        resultsView.setCenter(viewPosX + viewWidth / 2.0f, viewPosY + viewHeight / 2.0f + cardResultsScrollOffset);
+        resultsView.setViewport(FloatRect(viewPosX / window.getSize().x,viewPosY / window.getSize().y,viewWidth / window.getSize().x,viewHeight / window.getSize().y));
+
+        window.setView(resultsView);
+        window.draw(resultsText);
+        window.setView(originalView);
+    }
+
+    void displayVendorResults(const Event &currentEvent){
+        // This method is being implemented just like the displayCardResults method, however on the x-axis instead of y-axis for clipping and scrolling
+        const float textPadding = 10.0f;
+        const float scrollSpeed = 25.0f;
+
         Text vendorText;
         vendorText.setFont(font);
         vendorText.setString(vendorResultsString);
         vendorText.setCharacterSize(14);
         vendorText.setFillColor(Color::Black);
 
-        float textPadding = 10.0f;
         vendorText.setPosition(vendorResults.getPosition().x + textPadding,vendorResults.getPosition().y + textPadding);
 
-        string wrappedString;
-        string currentLine;
-        string word;
-        float maxWidth = vendorResults.getSize().x - 2 * textPadding;
+        FloatRect textBounds = vendorText.getGlobalBounds();
+        float totalTextWidth = textBounds.left - (vendorResults.getPosition().x + textPadding) + textBounds.width;
+        float viewWidth = vendorResults.getSize().x - (2 * textPadding);
+        float maxScrollX = std::max(0.0f, totalTextWidth - viewWidth);
 
-        Text tempText("", font, vendorText.getCharacterSize());
-        stringstream ss(vendorResultsString);
-
-        while (ss >> word) {
-            // Reading string input
-            tempText.setString(currentLine + (!currentLine.empty() ? " " : "") + word);
-            if (tempText.getLocalBounds().width > maxWidth) {
-                if (!currentLine.empty()) {
-                    wrappedString += currentLine + "\n";
-                    currentLine = word;
-                } else {
-                    wrappedString += word + "\n";
-                    currentLine = "";
-                }
-            } else {
-                if (!currentLine.empty()) {
-                    currentLine += " ";
-                }
-                currentLine += word;
+        // Scrolling input
+        if (currentEvent.type == Event::MouseWheelScrolled && currentEvent.mouseWheelScroll.wheel == Mouse::VerticalWheel){
+            Vector2i mousePos = Mouse::getPosition(window);
+            if (vendorResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                vendorResultsScrollOffset -= currentEvent.mouseWheelScroll.delta * scrollSpeed;
+                vendorResultsScrollOffset = std::max(0.0f, std::min(vendorResultsScrollOffset, maxScrollX));
             }
         }
-        wrappedString += currentLine;
-        vendorText.setString(wrappedString);
-        vendorText.setPosition(vendorResults.getPosition().x + textPadding,vendorResults.getPosition().y + textPadding);
 
-        // Clipping view (Reused from updateSearchResults)
-        View originalView = window.getView();
-        View vendorView(FloatRect(vendorResults.getPosition().x + textPadding,vendorResults.getPosition().y + textPadding,maxWidth,vendorResults.getSize().y - 2 * textPadding));
-        vendorView.setViewport(FloatRect(vendorResults.getPosition().x / window.getSize().x,vendorResults.getPosition().y / window.getSize().y,vendorResults.getSize().x / window.getSize().x,vendorResults.getSize().y / window.getSize().y));
+        // Creating clipping view (saving original view to be applied later)
+        View originalView = window.getView(); // Store the current view
+
+        float viewPosX = vendorResults.getPosition().x + textPadding;
+        float viewPosY = vendorResults.getPosition().y + textPadding;
+        float viewHeight = vendorResults.getSize().y - (2 * textPadding);
+
+        View vendorView;
+        vendorView.setSize(viewWidth, viewHeight);
+        vendorView.setCenter(viewPosX + viewWidth / 2.0f + vendorResultsScrollOffset,viewPosY + viewHeight / 2.0f);
+        vendorView.setViewport(FloatRect(viewPosX / window.getSize().x,viewPosY / window.getSize().y,viewWidth / window.getSize().x,viewHeight / window.getSize().y));
 
         window.setView(vendorView);
         window.draw(vendorText);
@@ -507,35 +663,49 @@ public:
         // Clear window before drawing
         window.clear(Color::White);
 
-        window.draw(cardResults);
         window.draw(searchBox);
         window.draw(search_button);
         window.draw(vendorBox);
+        window.draw(cardResults);
         window.draw(vendorResults);
 
         Text vendorsTextLabel("Your Opti-Cart", font, 18);
         vendorsTextLabel.setFillColor(Color::Black);
         FloatRect vendorTextBounds = vendorsTextLabel.getLocalBounds();
-        vendorsTextLabel.setPosition(vendorBox.getPosition().x + (vendorBox.getSize().x - vendorTextBounds.width) / 2.0f - vendorTextBounds.left,vendorBox.getPosition().y + (vendorBox.getSize().y - vendorTextBounds.height) / 2.0f - vendorTextBounds.top + 2);
+        vendorsTextLabel.setPosition(
+                vendorBox.getPosition().x + (vendorBox.getSize().x - vendorTextBounds.width) / 2.0f -
+                vendorTextBounds.left,
+                vendorBox.getPosition().y + (vendorBox.getSize().y - vendorTextBounds.height) / 2.0f -
+                vendorTextBounds.top + 2);
         window.draw(vendorsTextLabel);
 
         Text searchButtonTextLabel("S", font, 20);
         searchButtonTextLabel.setFillColor(Color::Black);
         FloatRect searchBtnTxtBounds = searchButtonTextLabel.getLocalBounds();
-        searchButtonTextLabel.setPosition(search_button.getPosition().x + (search_button.getSize().x - searchBtnTxtBounds.width) / 2.0f - searchBtnTxtBounds.left,search_button.getPosition().y + (search_button.getSize().y - searchBtnTxtBounds.height) / 2.0f - searchBtnTxtBounds.top);
+        searchButtonTextLabel.setPosition(
+                search_button.getPosition().x + (search_button.getSize().x - searchBtnTxtBounds.width) / 2.0f -
+                searchBtnTxtBounds.left,
+                search_button.getPosition().y + (search_button.getSize().y - searchBtnTxtBounds.height) / 2.0f -
+                searchBtnTxtBounds.top);
         window.draw(searchButtonTextLabel);
-
-        Text resultsInfoTextLabel("Algorithms PLACEHOLDER", font, 16);
-        resultsInfoTextLabel.setFillColor(Color::Black);
-        resultsInfoTextLabel.setPosition(cardResults.getPosition().x + 15,cardResults.getPosition().y + (cardResults.getSize().y - resultsInfoTextLabel.getCharacterSize()) / 2.0f);
-        window.draw(resultsInfoTextLabel);
 
         drawSearchInput();
         updateSearchResults(currentEvent);
         updateCardDisplay(currentCardToDisplay);
-        displayVendorResults();
         window.draw(cardDisplay);
 
+        if (Mouse::isButtonPressed(Mouse::Left)){
+            filtered_data = filtered_vendors(vendor_data, reviews, star_rating, number_of_sales);
+            // mouse position to world coordinates for use with buttons
+            Vector2f mouseWorld = window.mapPixelToCoords(Mouse::getPosition(window));
+            // getting the bounds of search button
+            FloatRect search_bounds = search_button.getGlobalBounds();
+            if (search_bounds.contains(mouseWorld)){
+                processAlgorithms();
+            }
+        }
+        displayVendorResults(currentEvent);
+        displayCardResults(currentEvent);
         window.display();
     }
 
@@ -565,7 +735,9 @@ public:
     }
 };
 
-ApplicationWindow::InputState ApplicationWindow::currentInputState = ApplicationWindow::entering_card_name;
+ApplicationWindow::InputState ApplicationWindow::currentInputState = ApplicationWindow::entering_vendor_ratings;
+string ApplicationWindow::vendorRatingString = "";
+string ApplicationWindow::vendorSalesString = "";
 string ApplicationWindow::cardNameInputString = "";
 string ApplicationWindow::quantityInputString = "";
 bool ApplicationWindow::isSearchBoxActive = false;
