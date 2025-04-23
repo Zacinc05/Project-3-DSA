@@ -83,7 +83,7 @@ public:
         window.create(VideoMode(window_width, window_height), "Opti-Cart");
         window.setFramerateLimit(60);
 
-        if (!this->font.loadFromFile("./Files/LSANS.TTF"))
+        if (!this->font.loadFromFile("LSANS.TTF"))
             cout << "Font loading failure. Check path." << endl;
 
 
