@@ -521,30 +521,10 @@ public:
 
         ostringstream oss;
 
-        if (!best_fit_unavailable_items.empty()) {
-            oss << "There are " << best_fit_unavailable_items.size() << " items that don't have enough in stock\n\n";
-            for (const auto& item : best_fit_unavailable_items) {
-                oss << item.first << ": " << item.second << " missing.\n";
-            }
-            oss << "\n";
-        } else {
-            oss << "All items were added to stock.\n";
-        }
-
         oss << "Your Total for Best Fit:\n$";
         oss << fixed << setprecision(2) << best_fit_sum.first << "\n";
         oss << "Number of vendors to ship items: " << best_fit_sum.second << "\n";
         oss << setprecision(5) << "Time to calculate: " << b_time << " milliseconds.\n\n";
-
-        if (!first_fit_unavailable_items.empty()) {
-            oss << "There are " << first_fit_unavailable_items.size() << " items that don't have enough in stock\n\n";
-            for (const auto& item : first_fit_unavailable_items) {
-                oss << item.first << ": " << item.second << " missing.\n";
-            }
-            oss << "\n";
-        } else {
-            oss << "All items were added to stock.\n";
-        }
 
         oss << "Your Total for First Fit:\n$";
         oss << fixed << setprecision(2) << first_fit_sum.first << "\n";
