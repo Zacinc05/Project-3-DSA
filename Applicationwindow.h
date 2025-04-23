@@ -348,7 +348,7 @@ public:
             else if (currentInputState == entering_card_name && !cardNameInputString.empty()){
                 add_item = cardNameInputString;
                 string vendor_listings = vendor_card_info(vendor_data[add_item], reviews);
-                vendorResultsString += vendor_listings;
+                vendorResultsString = vendor_listings;
                 quantityInputString.clear();
                 currentInputState = static_cast<ApplicationWindow::InputState>(entering_quantity);
             }
@@ -524,7 +524,7 @@ public:
         oss << "Your Total for Best Fit:\n$";
         oss << fixed << setprecision(2) << best_fit_sum.first << "\n";
         oss << "Number of vendors to ship items: " << best_fit_sum.second << "\n";
-        oss << setprecision(5) << "Time to calculate: " << b_time << " milliseconds.\n\n";
+        oss << setprecision(5) << "Time to calculate: " << b_time << " milliseconds.\n\n\n";
 
         oss << "Your Total for First Fit:\n$";
         oss << fixed << setprecision(2) << first_fit_sum.first << "\n";
@@ -540,7 +540,7 @@ public:
         // This method has a pretty similar implementation to the updateSearchResults method, since it's meant to prevent
         // The output from clipping out of bounds from the rectangle
         const float padding = 10.0f;
-        const float scrollSpeed = 10.0f;
+        const float scrollSpeed = 5.0f;
 
         Text resultsText;
         resultsText.setFont(font);
