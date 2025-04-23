@@ -83,7 +83,7 @@ public:
         window.create(VideoMode(window_width, window_height), "Opti-Cart");
         window.setFramerateLimit(60);
 
-        if (!this->font.loadFromFile("./cmake-build-debug/LSANS.TTF"))
+        if (!this->font.loadFromFile("./LSANS.TTF"))
             cout << "Font loading failure. Check path." << endl;
 
 
@@ -486,7 +486,7 @@ public:
             return;
         }
         int pokemonNumber = pokenumIter->second;
-        string filePath = "./cmake-build-debug/G1-Pokemon/" + to_string(pokemonNumber) + ".jpg";
+        string filePath = "./G1-Pokemon/" + to_string(pokemonNumber) + ".jpg";
 
         if (this->cardTextures.find(cardNameToDisplay) == this->cardTextures.end()){
             Texture newTexture;
