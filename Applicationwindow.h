@@ -169,7 +169,7 @@ public:
             bool duplicatesExist = false;
             for (const auto& card : savedCards){
                 string baseNewCardName = newCardName.substr(0, newCardName.find(" (x"));
-                if (card.rfind(baseNewCardName, 0) == 0) {
+                if (card.rfind(baseNewCardName, 0) == 0){
                     duplicatesExist = true;
                     break;
                 }
@@ -297,7 +297,7 @@ public:
             Vector2i mousePos = Mouse::getPosition(window); // Use member window
             // Check if click is inside the searchBox rectangle shape
             isSearchBoxActive = searchBox.getGlobalBounds().contains(static_cast<Vector2f>(mousePos));
-            if(isSearchBoxActive) {
+            if(isSearchBoxActive){
                 showCursorState = true;
                 cursorBlinkClock.restart();
             }
@@ -365,7 +365,7 @@ public:
             }
         }
         else if (isSearchBoxActive && currentEvent.type == Event::KeyPressed && currentEvent.key.code == Keyboard::Escape){ // Escape key
-            if (currentInputState == entering_quantity) {
+            if (currentInputState == entering_quantity){
                 quantityInputString.clear();
                 currentInputState = static_cast<ApplicationWindow::InputState>(entering_card_name);
             } else if (currentInputState == entering_card_name){
@@ -391,13 +391,13 @@ public:
         }
         // Determining inputState
         string displayString;
-        if (currentInputState == entering_vendor_ratings) {
+        if (currentInputState == entering_vendor_ratings){
             displayString = vendorRatingString;
-        } else if (currentInputState == entering_vendor_sales) {
+        } else if (currentInputState == entering_vendor_sales){
             displayString = vendorSalesString;
-        } else if (currentInputState == entering_card_name) {
+        } else if (currentInputState == entering_card_name){
             displayString = cardNameInputString;
-        } else if (currentInputState == entering_quantity) {
+        } else if (currentInputState == entering_quantity){
             displayString = quantityInputString;
         }
 
@@ -426,17 +426,17 @@ public:
             placeholderText.setPosition(searchBox.getPosition().x + 10, textPosY);
 
             // Set placeholder text based on the current input state
-            if (currentInputState == entering_vendor_ratings) {
+            if (currentInputState == entering_vendor_ratings){
                 placeholderText.setString("Enter a min rating!");
-            } else if (currentInputState == entering_vendor_sales) {
+            } else if (currentInputState == entering_vendor_sales){
                 placeholderText.setString("Enter the min sales!");
-            } else if (currentInputState == entering_card_name) {
+            } else if (currentInputState == entering_card_name){
                 placeholderText.setString("Enter a card name!");
             } else if (currentInputState == entering_quantity){
                 placeholderText.setString("Enter a quantity!");
             }
             window.draw(placeholderText);
-        } else {
+        } else{
             inputText.setString(displayString);
             window.draw(inputText);
         }
@@ -472,14 +472,14 @@ public:
                 {"Zapdos", 145}, {"Moltres", 146}, {"Dratini", 147}, {"Dragonair", 148}, {"Dragonite", 149}, {"Mewtwo", 150}
         };
 
-        if (cardNameToDisplay.empty()) {
+        if (cardNameToDisplay.empty()){
             cardDisplay.setTexture(nullptr);
             cardDisplay.setFillColor(Color::White);
             return;
         }
 
         auto pokenumIter = pokemonNumbers.find(cardNameToDisplay);
-        if (pokenumIter == pokemonNumbers.end()) {
+        if (pokenumIter == pokemonNumbers.end()){
             cout << "Pokemon card not found for: " << cardNameToDisplay << endl;
             cardDisplay.setTexture(nullptr);
             cardDisplay.setFillColor(Color::White);
@@ -490,7 +490,7 @@ public:
 
         if (this->cardTextures.find(cardNameToDisplay) == this->cardTextures.end()){
             Texture newTexture;
-            if (!newTexture.loadFromFile(filePath)) {
+            if (!newTexture.loadFromFile(filePath)){
                 cout << "Failed to load texture file: " << filePath << endl;
                 cardDisplay.setTexture(nullptr);
                 cardDisplay.setFillColor(Color::White);
@@ -498,14 +498,8 @@ public:
             }
             this->cardTextures[cardNameToDisplay] = newTexture;
         }
-        try {
             cardDisplay.setTexture(&this->cardTextures.at(cardNameToDisplay), true);
             cardDisplay.setFillColor(Color::White);
-        } catch (const out_of_range& oor) {
-            cerr << "Error accessing texture cache for: " << cardNameToDisplay << endl;
-            cardDisplay.setTexture(nullptr);
-            cardDisplay.setFillColor(Color::White);
-        }
     }
 
     void setCardResults(const string& card_results){
@@ -566,7 +560,7 @@ public:
         // This method has a pretty similar implementation to the updateSearchResults method, since it's meant to prevent
         // The output from clipping out of bounds from the rectangle
         const float padding = 10.0f;
-        const float scrollSpeed = 25.0f;
+        const float scrollSpeed = 10.0f;
 
         Text resultsText;
         resultsText.setFont(font);
@@ -581,16 +575,16 @@ public:
         float maxScroll = std::max(0.0f, totalTextHeight - viewHeight);
 
         // Scrolling input
-        if (currentEvent.type == Event::MouseWheelScrolled && currentEvent.mouseWheelScroll.wheel == Mouse::VerticalWheel) {
+        if (currentEvent.type == Event::MouseWheelScrolled && currentEvent.mouseWheelScroll.wheel == Mouse::VerticalWheel){
             // Check if mouse is over the cardResults rectangle
             Vector2i mousePos = Mouse::getPosition(window);
-            if (cardResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+            if (cardResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))){
                 // Adjusting scroll offset
                 cardResultsScrollOffset -= currentEvent.mouseWheelScroll.delta * scrollSpeed;
                 // Clamping scroll offset
-                if (cardResultsScrollOffset < 0.0f) {
+                if (cardResultsScrollOffset < 0.0f){
                     cardResultsScrollOffset = 0.0f;
-                } else if (cardResultsScrollOffset > maxScroll) {
+                } else if (cardResultsScrollOffset > maxScroll){
                     cardResultsScrollOffset = maxScroll;
                 }
             }
@@ -636,7 +630,7 @@ public:
         // Scrolling input
         if (currentEvent.type == Event::MouseWheelScrolled && currentEvent.mouseWheelScroll.wheel == Mouse::VerticalWheel){
             Vector2i mousePos = Mouse::getPosition(window);
-            if (vendorResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+            if (vendorResults.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))){
                 vendorResultsScrollOffset -= currentEvent.mouseWheelScroll.delta * scrollSpeed;
                 vendorResultsScrollOffset = std::max(0.0f, std::min(vendorResultsScrollOffset, maxScrollX));
             }
@@ -711,13 +705,13 @@ public:
 
     void applicationRun(){
         Event event;
-        while (window.isOpen()) {
-            while (window.pollEvent(event)) {
+        while (window.isOpen()){
+            while (window.pollEvent(event)){
                 if (event.type == Event::Closed)
                     window.close();
 
                 string finalizedSearch = searchBoxInput(event);
-                if (!finalizedSearch.empty()) {
+                if (!finalizedSearch.empty()){
                     newCardName = finalizedSearch;
 
                     // Extract only the name for the display
